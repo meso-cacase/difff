@@ -50,23 +50,23 @@ foreach (@diffsummary){  # 異なる部分をハイライト表示する
 		$a_start = $2 || $a_end ;
 		$b_start = $4 || 0 ;
 		$b_end = $6 || $b_start ;
-		$a_split[$a_start - 1] = '<em>' . ($a_split[$a_start - 1] || '') ;
+		$a_split[$a_start - 1] = '<em>' . ($a_split[$a_start - 1] // '') ;
 		$a_split[$a_end - 1] .= '</em>' ;
-		$b_split[$b_start - 1] = '<em>' . ($b_split[$b_start - 1] || '') ;
+		$b_split[$b_start - 1] = '<em>' . ($b_split[$b_start - 1] // '') ;
 		$b_split[$b_end - 1] .= '</em>' ;
 	} elsif ($_ =~ /^((\d+),)?(\d+)d(\d+)(,(\d+))?$/){  # 欠失している場合
 		$a_end = $3 || 0 ;
 		$a_start = $2 || $a_end ;
 		$b_start = $4 || 0 ;
 		$b_end = $6 || $b_start ;
-		$a_split[$a_start - 1] = '<em>' . ($a_split[$a_start - 1] || '') ;
+		$a_split[$a_start - 1] = '<em>' . ($a_split[$a_start - 1] // '') ;
 		$a_split[$a_end - 1] .= '</em>' ;
 	} elsif ($_ =~ /^((\d+),)?(\d+)a(\d+)(,(\d+))?$/){  # 挿入している場合
 		$a_end = $3 || 0 ;
 		$a_start = $2 || $a_end ;
 		$b_start = $4 || 0 ;
 		$b_end = $6 || $b_start ;
-		$b_split[$b_start - 1] = '<em>' . ($b_split[$b_start - 1] || '') ;
+		$b_split[$b_start - 1] = '<em>' . ($b_split[$b_start - 1] // '') ;
 		$b_split[$b_end - 1] .= '</em>' ;
 	} elsif ($_ =~ /> <\$>/){  # 改行の数をあわせる処理
 		my $i = ($a_start > 1) ? $a_start - 2 : 0 ;
@@ -135,7 +135,7 @@ return %query ;
 } ;
 # ====================
 sub split_text {
-my $text = join('', @_) || '' ;
+my $text = join('', @_) // '' ;
 $text =~ s/\n/<\$>/g ;  # もともとの改行を <$> に変換して処理する
 my @text ;
 while ($text =~ s/^([a-z]+|<\$>|$eucjp|.)//){
@@ -145,7 +145,7 @@ return @text ;
 } ;
 # ====================
 sub fifo_send {  # usage: fifo_send($text, $path) ;
-my $text = $_[0] || '' ;
+my $text = $_[0] // '' ;
 my $path = $_[1] or print_error_html('ERROR : open failed') ;
 mkfifo($path, 0600) or print_error_html('ERROR : open failed') ;
 my $pid = fork ;
@@ -159,7 +159,7 @@ if ($pid == 0){
 } ;
 # ====================
 sub escape_char {  # <,>,&,'," の5文字を実態参照に変換する
-my $string = $_[0] || '' ;
+my $string = $_[0] // '' ;
 $string =~ s/</&lt;/g ;
 $string =~ s/>/&gt;/g ;
 $string =~ s/\&/&amp;/g ;
@@ -169,13 +169,13 @@ return $string ;
 } ;
 # ====================
 sub escape_space {  # 空白文字を実態参照に変換
-my $string = $_[0] || '' ;
+my $string = $_[0] // '' ;
 $string =~ s/\s/&nbsp;/g ;  # 空白文字（スペース、タブ等含む）はスペースとみなす
 return $string ;
 } ;
 # ====================
 sub print_html {
-my $table = $_[0] || '' ;
+my $table = $_[0] // '' ;
 print 'Content-type: text/html; charset=EUC-JP
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -218,7 +218,7 @@ exit ;
 } ;
 # ====================
 sub print_error_html {
-my $error_text = $_[0] || '' ;
+my $error_text = $_[0] // '' ;
 print 'Content-type: text/html; charset=EUC-JP
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
