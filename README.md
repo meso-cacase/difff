@@ -49,7 +49,7 @@ index.html と difff.cgi をウェブ公開用のディレクトリに置きま�
 difff.cgi の下記の部分を、環境にあわせて書き換えてください。
 
 ```perl
-#!/usr/local/bin/perl
+#!/usr/bin/perl
 ```
 
 ↑ Perlのパスを調べて記載してください。
@@ -71,7 +71,7 @@ my $fifodir = '/tmp' ;  # FIFOを作成するディレクトリを指定する
 動かない場合、コマンドラインから下記を実行すると動作確認ができます。
 
 ```bash
-% QUERY_STRING="sequenceA=hogehoge&sequenceB=hagehage"; export QUERY_STRING
+% export QUERY_STRING="sequenceA=hogehoge&sequenceB=hagehage"
 % ./difff.cgi
 ```
 
