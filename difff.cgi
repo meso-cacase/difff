@@ -1,11 +1,11 @@
-#!/usr/local/bin/perl
+#!/usr/bin/perl
 
 # テキスト比較ツール difff《ﾃﾞｭﾌﾌ》： 2つのテキストの差分をハイライト表示するCGI
 #
 # 比較するテキストとして、HTTPリクエストから sequenceA および sequenceB を取得し、
 # diffコマンドを用いて文字ごと（英単語は単語ごと）に比較し差分をハイライト表示する
 #
-# 2012-10-22.meso-cacase
+# 2012-10-22.@meso_cacase
 
 use warnings ;
 use strict ;
@@ -158,13 +158,13 @@ if ($pid == 0){
 }
 } ;
 # ====================
-sub escape_char {  # <,>,&,'," の5文字を実態参照に変換する
+sub escape_char {  # < > & ' " の5文字を実態参照に変換する
 my $string = $_[0] // '' ;
+$string =~ s/\&/&amp;/g ;
 $string =~ s/</&lt;/g ;
 $string =~ s/>/&gt;/g ;
-$string =~ s/\&/&amp;/g ;
-$string =~ s/\'/&#39;/g ;  #'
-$string =~ s/\"/&quot;/g ;  #"
+$string =~ s/\'/&apos;/g ;  # '
+$string =~ s/\"/&quot;/g ;  # "
 return $string ;
 } ;
 # ====================
