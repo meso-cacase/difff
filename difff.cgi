@@ -24,6 +24,11 @@ my $eucjp = "(?:$ascii|$twobyte|$threebyte)" ;  # EUC-JP文字全体の集合
 # ▼ HTTPリクエストからクエリを取得し整形してFIFOに送る
 my %query = get_query_parameters() ;
 
+# 両方とも空欄またはundefのときはエラーを表示しトップページにリダイレクト
+(not defined $query{'sequenceA'} or $query{'sequenceA'} eq '' ) and
+(not defined $query{'sequenceB'} or $query{'sequenceB'} eq '' ) and
+print_error_html('フォームが空欄のようです。比較したい文章を入れてくだちい') ;
+
 my $fifopath_a = "$fifodir/difff.$$.A" ;  # $$はプロセスID
 my @a_split = split_text( escape_char($query{'sequenceA'}) ) ;
 my $a_split = join("\n", @a_split) . "\n" ;
@@ -217,7 +222,10 @@ print 'Content-type: text/html; charset=EUC-JP
 exit ;
 } ;
 # ====================
-sub print_error_html {
+sub print_error_html {  # エラーメッセージを表示
+# ヘッダの meta http-equiv="Refresh" で5秒後にトップページにリダイレクトする。
+# または、javascript で body onload から6秒後にトップページにリダイレクトする。
+# 上記が動作しない場合でも、トップページへのリンクを表示する。
 my $error_text = $_[0] // '' ;
 print 'Content-type: text/html; charset=EUC-JP
 
@@ -226,12 +234,20 @@ print 'Content-type: text/html; charset=EUC-JP
 
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=EUC-JP">
+<meta http-equiv="Refresh" content="5;URL=.">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
 <meta http-equiv="Content-Style-Type" content="text/css">
 <meta name="author" content="Yuki Naito">
-<title>difff output</title>
+<title>difff error</title>
+<script type="text/javascript">
+<!--
+	function refresh() { location.href = "."; }
+-->
+</script>
 <style type="text/css">
 <!--
 	* { font-family:verdana,arial,helvetica,sans-serif; font-size:10pt }
+	a { color:#3366CC; font-style:normal }
 	em { font-weight:bold;
 		font-style:normal;
 		background-color:#99FF99 }
@@ -239,11 +255,13 @@ print 'Content-type: text/html; charset=EUC-JP
 </style>
 </head>
 
-<body>
+<body onload="setTimeout(\'refresh()\', 6000);">
 
 <p><em>
-' . $error_text . 
-'</em></p>
+' . $error_text . '
+</em></p>
+
+<p><a href=".">もどる</a></p>
 
 </body>
 </html>
