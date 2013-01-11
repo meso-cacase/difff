@@ -1,10 +1,10 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html lang=ja>
+<html lang=en>
 
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=EUC-JP">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="author" content="Yuki Naito">
-<title>difff - デュフフ</title>
+<title>difff - text compare</title>
 <style type="text/css">
 <!--
 	p,div { font-family:verdana,arial,helvetica,sans-serif; font-size:9pt }
@@ -16,25 +16,24 @@
 <body>
 
 <div style="border-top:15px solid black; padding-top:10px">
-<font size=5>テキスト比較ツール difff《ﾃﾞｭﾌﾌ》</font><font size=3>ver.5</font>
+<font size=5><b>difff</b> - online text compare </font><font size=3>ver.5</font>
 &emsp;
 <small style="vertical-align:top">
-<a style="vertical-align:top" href="index_en.html">English</a> |
-Japanese
+English |
+<a style="vertical-align:top" href=".">Japanese</a>
 </small>
 </div>
 
 <hr><!-- ________________________________________ -->
 
 <div>
-<p>下の枠に比較したい文章を入れてくだちい。差分 (diff) を表示します。</p>
+<p>Input two texts below and click 'compare':</p>
 </div>
 
 <form method=POST action="difff.cgi">
 
 <p>
 <textarea name=sequenceA rows=15 cols=90>
-下記の文章を比較してください。
    Betty Botter bought some butter, 
 But, she said, this butter's bitter;
 If I put it in my batter,
@@ -52,7 +51,6 @@ Bought a bit of better butter.
 
 <p>
 <textarea name=sequenceB rows=15 cols=90>
-下記の文章を，ﾋﾋ較してくだちい．
 Betty Botter bought some butter,
 But, she said, the butter's bitter;
 If I put it in my batter,
@@ -68,22 +66,22 @@ Bought a bit of better butter.
 </textarea>
 </p>
 
-<p><input type=submit name=Submit value="比較する" align=bottom></p>
+<p><input type=submit name=Submit value="compare" align=bottom></p>
 
 </form>
 
 <div>
-新着情報：
+What's new:
 <ul>
-	<li>2013-01-11　<a style="vertical-align:top" href="index_en.html">英語版</a> を公開
-	<li>2012-10-22　ソースを公開 -
-		<a target="_blank" href="https://github.com/meso-cacase/difff">GitHub</a>
-	<li>2012-04-16　GIGAZINEに掲載 -
+	<li>2013-01-11 English page launched.
+	<li>2012-10-22 Source code available via
+		<a target="_blank" href="https://github.com/meso-cacase/difff">GitHub</a>.
+	<li>2012-04-16 <b>difff</b> was introduced by 
 		<a target="_blank" href="http://gigazine.net/news/20120416-difff/">
-			日本語対応で簡単に差分が確認できるテキスト比較ツール「difff(ﾃﾞｭﾌﾌ)」</a>
-	<li>2012-04-13　全面リニューアル。左右で段落がずれないようにした (ver.5)
-	<li>2008-02-18　日本語対応 (ver.4)
-	<li>2004-02-19　初代 difff 完成 (ver.1)
+			GIGAZINE</a> (in Japanese).
+	<li>2012-04-13 <b>difff</b> ver.5 released.
+	<li>2008-02-18 <b>difff</b> ver.4 released. Japanese characters supported.
+	<li>2004-02-19 <b>difff</b> ver.1 released.
 </ul>
 </div>
 
