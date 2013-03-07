@@ -1,6 +1,15 @@
 difff《ﾃﾞｭﾌﾌ》
 ======================
 
+----------------------
+
+**本ブランチの内容はver.5 (旧バージョン) のものです。**  
+**ver.5は http://altair.dbcls.jp/difff/v5/ で稼働しています。**
+
+**最新版はmasterブランチを参照してください。**
+
+----------------------
+
 Webベースのテキスト比較ツールです。2つのテキストの差分をハイライト表示します。
 
 + http://altair.dbcls.jp/difff/  
@@ -86,5 +95,5 @@ my $fifodir = '/tmp' ;  # FIFOを作成するディレクトリを指定する
 
 Copyright &copy; 2004-2013 Yuki Naito
  ([@meso_cacase](http://twitter.com/meso_cacase))  
-This software is distributed under modified BSD license
- (http://www.opensource.org/licenses/bsd-license.php)
+This software is distributed under [modified BSD license]
+ (http://www.opensource.org/licenses/bsd-license.php).
