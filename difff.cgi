@@ -1,56 +1,56 @@
 #!/usr/bin/perl
 
-# ¥Æ¥­¥¹¥ÈÈæ³Ó¥Ä¡¼¥ë difff¡ÔÃŞ­ÌÌ¡Õ¡§ 2¤Ä¤Î¥Æ¥­¥¹¥È¤Îº¹Ê¬¤ò¥Ï¥¤¥é¥¤¥ÈÉ½¼¨¤¹¤ëCGI
+# ãƒ†ã‚­ã‚¹ãƒˆæ¯”è¼ƒãƒ„ãƒ¼ãƒ« difffã€Šï¾ƒï¾ï½­ï¾Œï¾Œã€‹ï¼š 2ã¤ã®ãƒ†ã‚­ã‚¹ãƒˆã®å·®åˆ†ã‚’ãƒã‚¤ãƒ©ã‚¤ãƒˆè¡¨ç¤ºã™ã‚‹CGI
 #
-# Èæ³Ó¤¹¤ë¥Æ¥­¥¹¥È¤È¤·¤Æ¡¢HTTP¥ê¥¯¥¨¥¹¥È¤«¤é sequenceA ¤ª¤è¤Ó sequenceB ¤ò¼èÆÀ¤·¡¢
-# diff¥³¥Ş¥ó¥É¤òÍÑ¤¤¤ÆÊ¸»ú¤´¤È¡Ê±ÑÃ±¸ì¤ÏÃ±¸ì¤´¤È¡Ë¤ËÈæ³Ó¤·º¹Ê¬¤ò¥Ï¥¤¥é¥¤¥ÈÉ½¼¨¤¹¤ë
+# æ¯”è¼ƒã™ã‚‹ãƒ†ã‚­ã‚¹ãƒˆã¨ã—ã¦ã€HTTPãƒªã‚¯ã‚¨ã‚¹ãƒˆã‹ã‚‰ sequenceA ãŠã‚ˆã³ sequenceB ã‚’å–å¾—ã—ã€
+# diffã‚³ãƒãƒ³ãƒ‰ã‚’ç”¨ã„ã¦æ–‡å­—ã”ã¨ï¼ˆè‹±å˜èªã¯å˜èªã”ã¨ï¼‰ã«æ¯”è¼ƒã—å·®åˆ†ã‚’ãƒã‚¤ãƒ©ã‚¤ãƒˆè¡¨ç¤ºã™ã‚‹
 #
-# 2012-10-22.@meso_cacase
+# 2012-10-22 Yuki Naito (@meso_cacase)
+# 2013-03-07 Yuki Naito (@meso_cacase) æ—¥æœ¬èªå‡¦ç†ã‚’Perl5.8/UTF-8ã«å¤‰æ›´
 
 use warnings ;
 use strict ;
+use utf8 ;
 use POSIX ;
 
-my $diffcmd = '/usr/bin/diff' ;  # diff¥³¥Ş¥ó¥É¤Î¥Ñ¥¹¤ò»ØÄê¤¹¤ë
-my $fifodir = '/tmp' ;  # FIFO¤òºîÀ®¤¹¤ë¥Ç¥£¥ì¥¯¥È¥ê¤ò»ØÄê¤¹¤ë
+my $diffcmd = '/usr/bin/diff' ;  # diffã‚³ãƒãƒ³ãƒ‰ã®ãƒ‘ã‚¹ã‚’æŒ‡å®šã™ã‚‹
+my $fifodir = '/tmp' ;  # FIFOã‚’ä½œæˆã™ã‚‹ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’æŒ‡å®šã™ã‚‹
 
-# ¢§ EUC-JP¤Î1Ê¸»ú¤Ë¥Ş¥Ã¥Á¤¹¤ëÀµµ¬É½¸½¤òÄêµÁ¤·¤Æ¤ª¤¯
-my $ascii = '[\x00-\x7F]' ;  # ASCIIÊ¸»ú¤Î½¸¹ç
-my $twobyte = '(?:[\x8E\xA1-\xFE][\xA1-\xFE])' ;  # 2¥Ğ¥¤¥ÈEUC-JPÊ¸»ú¤Î½¸¹ç
-my $threebyte = '(?:\x8F[\xA1-\xFE][\xA1-\xFE])' ;  # 3¥Ğ¥¤¥ÈEUC-JPÊ¸»ú¤Î½¸¹ç
-my $eucjp = "(?:$ascii|$twobyte|$threebyte)" ;  # EUC-JPÊ¸»úÁ´ÂÎ¤Î½¸¹ç
-# ¢¥ EUC-JP¤Î1Ê¸»ú¤Ë¥Ş¥Ã¥Á¤¹¤ëÀµµ¬É½¸½¤òÄêµÁ¤·¤Æ¤ª¤¯
+binmode STDOUT, ':utf8' ;  # æ¨™æº–å‡ºåŠ›ã‚’UTF-8ã‚¨ãƒ³ã‚³ãƒ¼ãƒ‰
+binmode STDERR, ':utf8' ;  # æ¨™æº–ã‚¨ãƒ©ãƒ¼å‡ºåŠ›ã‚’UTF-8ã‚¨ãƒ³ã‚³ãƒ¼ãƒ‰
 
-# ¢§ HTTP¥ê¥¯¥¨¥¹¥È¤«¤é¥¯¥¨¥ê¤ò¼èÆÀ¤·À°·Á¤·¤ÆFIFO¤ËÁ÷¤ë
+# â–¼ HTTPãƒªã‚¯ã‚¨ã‚¹ãƒˆã‹ã‚‰ã‚¯ã‚¨ãƒªã‚’å–å¾—ã—æ•´å½¢ã—ã¦FIFOã«é€ã‚‹
 my %query = get_query_parameters() ;
 
-# Î¾Êı¤È¤â¶õÍó¤Ş¤¿¤Ïundef¤Î¤È¤­¤Ï¥¨¥é¡¼¤òÉ½¼¨¤·¥È¥Ã¥×¥Ú¡¼¥¸¤Ë¥ê¥À¥¤¥ì¥¯¥È
+# ä¸¡æ–¹ã¨ã‚‚ç©ºæ¬„ã¾ãŸã¯undefã®ã¨ãã¯ã‚¨ãƒ©ãƒ¼ã‚’è¡¨ç¤ºã—ãƒˆãƒƒãƒ—ãƒšãƒ¼ã‚¸ã«ãƒªãƒ€ã‚¤ãƒ¬ã‚¯ãƒˆ
 (not defined $query{'sequenceA'} or $query{'sequenceA'} eq '' ) and
 (not defined $query{'sequenceB'} or $query{'sequenceB'} eq '' ) and
-print_error_html('¥Õ¥©¡¼¥à¤¬¶õÍó¤Î¤è¤¦¤Ç¤¹¡£Èæ³Ó¤·¤¿¤¤Ê¸¾Ï¤òÆş¤ì¤Æ¤¯¤À¤Á¤¤') ;
+print_error_html('ãƒ•ã‚©ãƒ¼ãƒ ãŒç©ºæ¬„ã®ã‚ˆã†ã§ã™ã€‚æ¯”è¼ƒã—ãŸã„æ–‡ç« ã‚’å…¥ã‚Œã¦ãã ã¡ã„') ;
 
-my $fifopath_a = "$fifodir/difff.$$.A" ;  # $$¤Ï¥×¥í¥»¥¹ID
+my $fifopath_a = "$fifodir/difff.$$.A" ;  # $$ã¯ãƒ—ãƒ­ã‚»ã‚¹ID
+utf8::decode($query{'sequenceA'}) ;       # utf8ãƒ•ãƒ©ã‚°ã‚’æœ‰åŠ¹ã«ã™ã‚‹
 my @a_split = split_text( escape_char($query{'sequenceA'}) ) ;
 my $a_split = join("\n", @a_split) . "\n" ;
 fifo_send($a_split, $fifopath_a) ;
 
-my $fifopath_b = "$fifodir/difff.$$.B" ;  # $$¤Ï¥×¥í¥»¥¹ID
+my $fifopath_b = "$fifodir/difff.$$.B" ;  # $$ã¯ãƒ—ãƒ­ã‚»ã‚¹ID
+utf8::decode($query{'sequenceB'}) ;       # utf8ãƒ•ãƒ©ã‚°ã‚’æœ‰åŠ¹ã«ã™ã‚‹
 my @b_split = split_text( escape_char($query{'sequenceB'}) ) ;
 my $b_split = join("\n", @b_split) . "\n" ;
 fifo_send($b_split, $fifopath_b) ;
-# ¢¥ HTTP¥ê¥¯¥¨¥¹¥È¤«¤é¥¯¥¨¥ê¤ò¼èÆÀ¤·À°·Á¤·¤ÆFIFO¤ËÁ÷¤ë
+# â–² HTTPãƒªã‚¯ã‚¨ã‚¹ãƒˆã‹ã‚‰ã‚¯ã‚¨ãƒªã‚’å–å¾—ã—æ•´å½¢ã—ã¦FIFOã«é€ã‚‹
 
-# ¢§ diff¥³¥Ş¥ó¥É¤Î¼Â¹Ô
+# â–¼ diffã‚³ãƒãƒ³ãƒ‰ã®å®Ÿè¡Œ
 (-e $diffcmd) or print_error_html("ERROR : $diffcmd : not found") ;
 (-x $diffcmd) or print_error_html("ERROR : $diffcmd : not executable") ;
 my @diffout = `$diffcmd -d $fifopath_a $fifopath_b` ;
 my @diffsummary = grep /(^[^<>-]|<\$>)/, @diffout ;
-# ¢¥ diff¥³¥Ş¥ó¥É¤Î¼Â¹Ô
+# â–² diffã‚³ãƒãƒ³ãƒ‰ã®å®Ÿè¡Œ
 
-# ¢§ º¹Ê¬¤Î¸¡½Ğ¤ÈHTML¥¿¥°¤ÎËä¤á¹ş¤ß
+# â–¼ å·®åˆ†ã®æ¤œå‡ºã¨HTMLã‚¿ã‚°ã®åŸ‹ã‚è¾¼ã¿
 my ($a_start, $a_end, $b_start, $b_end) = (0,0,0,0) ;
-foreach (@diffsummary){  # °Û¤Ê¤ëÉôÊ¬¤ò¥Ï¥¤¥é¥¤¥ÈÉ½¼¨¤¹¤ë
-	if ($_ =~ /^((\d+),)?(\d+)c(\d+)(,(\d+))?$/){  # ÃÖ´¹¤·¤Æ¤¤¤ë¾ì¹ç
+foreach (@diffsummary){  # ç•°ãªã‚‹éƒ¨åˆ†ã‚’ãƒã‚¤ãƒ©ã‚¤ãƒˆè¡¨ç¤ºã™ã‚‹
+	if ($_ =~ /^((\d+),)?(\d+)c(\d+)(,(\d+))?$/){  # ç½®æ›ã—ã¦ã„ã‚‹å ´åˆ
 		$a_end = $3 || 0 ;
 		$a_start = $2 || $a_end ;
 		$b_start = $4 || 0 ;
@@ -59,34 +59,34 @@ foreach (@diffsummary){  # °Û¤Ê¤ëÉôÊ¬¤ò¥Ï¥¤¥é¥¤¥ÈÉ½¼¨¤¹¤ë
 		$a_split[$a_end - 1] .= '</em>' ;
 		$b_split[$b_start - 1] = '<em>' . ($b_split[$b_start - 1] // '') ;
 		$b_split[$b_end - 1] .= '</em>' ;
-	} elsif ($_ =~ /^((\d+),)?(\d+)d(\d+)(,(\d+))?$/){  # ·ç¼º¤·¤Æ¤¤¤ë¾ì¹ç
+	} elsif ($_ =~ /^((\d+),)?(\d+)d(\d+)(,(\d+))?$/){  # æ¬ å¤±ã—ã¦ã„ã‚‹å ´åˆ
 		$a_end = $3 || 0 ;
 		$a_start = $2 || $a_end ;
 		$b_start = $4 || 0 ;
 		$b_end = $6 || $b_start ;
 		$a_split[$a_start - 1] = '<em>' . ($a_split[$a_start - 1] // '') ;
 		$a_split[$a_end - 1] .= '</em>' ;
-	} elsif ($_ =~ /^((\d+),)?(\d+)a(\d+)(,(\d+))?$/){  # ÁŞÆş¤·¤Æ¤¤¤ë¾ì¹ç
+	} elsif ($_ =~ /^((\d+),)?(\d+)a(\d+)(,(\d+))?$/){  # æŒ¿å…¥ã—ã¦ã„ã‚‹å ´åˆ
 		$a_end = $3 || 0 ;
 		$a_start = $2 || $a_end ;
 		$b_start = $4 || 0 ;
 		$b_end = $6 || $b_start ;
 		$b_split[$b_start - 1] = '<em>' . ($b_split[$b_start - 1] // '') ;
 		$b_split[$b_end - 1] .= '</em>' ;
-	} elsif ($_ =~ /> <\$>/){  # ²ş¹Ô¤Î¿ô¤ò¤¢¤ï¤»¤ë½èÍı
+	} elsif ($_ =~ /> <\$>/){  # æ”¹è¡Œã®æ•°ã‚’ã‚ã‚ã›ã‚‹å‡¦ç†
 		my $i = ($a_start > 1) ? $a_start - 2 : 0 ;
 		while ($i < scalar(@a_split) and not $a_split[$i] =~ s/<\$>/<\$><\$>/){ $i ++ }
-	} elsif ($_ =~ /< <\$>/){  # ²ş¹Ô¤Î¿ô¤ò¤¢¤ï¤»¤ë½èÍı
+	} elsif ($_ =~ /< <\$>/){  # æ”¹è¡Œã®æ•°ã‚’ã‚ã‚ã›ã‚‹å‡¦ç†
 		my $i = ($b_start > 1) ? $b_start - 2 : 0 ;
 		while ($i < scalar(@b_split) and not $b_split[$i] =~ s/<\$>/<\$><\$>/){ $i ++ }
 	}
 }
-# ¢¥ º¹Ê¬¤Î¸¡½Ğ¤ÈHTML¥¿¥°¤ÎËä¤á¹ş¤ß
+# â–² å·®åˆ†ã®æ¤œå‡ºã¨HTMLã‚¿ã‚°ã®åŸ‹ã‚è¾¼ã¿
 
 my $a_final = join '', @a_split ;
 my $b_final = join '', @b_split ;
 
-# ÊÑ¹¹²Õ½ê¤¬<td>¤ò¤Ş¤¿¤°¾ì¹ç¤Î½èÍı
+# å¤‰æ›´ç®‡æ‰€ãŒ<td>ã‚’ã¾ãŸãå ´åˆã®å‡¦ç†
 while ( $a_final =~ s{(<em>[^<>]*)<\$>(([^<>]|<\$>)*</em>)}{$1</em><\$><em>$2}g ){}
 while ( $b_final =~ s{(<em>[^<>]*)<\$>(([^<>]|<\$>)*</em>)}{$1</em><\$><em>$2}g ){}
 
@@ -116,15 +116,15 @@ print_html($table) ;
 exit ;
 
 # ====================
-sub get_query_parameters {  # CGI¤¬¼õ¤±¼è¤Ã¤¿¥Ñ¥é¥á¡¼¥¿¤Î½èÍı
+sub get_query_parameters {  # CGIãŒå—ã‘å–ã£ãŸãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®å‡¦ç†
 my $buffer = '' ;
 if (defined $ENV{'REQUEST_METHOD'} and $ENV{'REQUEST_METHOD'} eq 'POST' and defined $ENV{'CONTENT_LENGTH'}){
 	eval 'read(STDIN, $buffer, $ENV{"CONTENT_LENGTH"})' or
-	print_error_html('ERROR : get_query_parameters() : read failed') ;  # read¤Ë¼ºÇÔ¤·¤¿¾ì¹ç¤Î¥¨¥é¡¼É½¼¨
+	print_error_html('ERROR : get_query_parameters() : read failed') ;  # readã«å¤±æ•—ã—ãŸå ´åˆã®ã‚¨ãƒ©ãƒ¼è¡¨ç¤º
 } elsif (defined $ENV{'QUERY_STRING'}){
 	$buffer = $ENV{'QUERY_STRING'} ;
 }
-length $buffer > 1000000 and print_error_html('ERROR : input too large') ;  # ¥µ¥¤¥º¤¬Âç¤­¤¹¤®
+length $buffer > 1000000 and print_error_html('ERROR : input too large') ;  # ã‚µã‚¤ã‚ºãŒå¤§ãã™ã
 my %query ;
 my @query = split /&/, $buffer ;
 foreach (@query){
@@ -141,9 +141,9 @@ return %query ;
 # ====================
 sub split_text {
 my $text = join('', @_) // '' ;
-$text =~ s/\n/<\$>/g ;  # ¤â¤È¤â¤È¤Î²ş¹Ô¤ò <$> ¤ËÊÑ´¹¤·¤Æ½èÍı¤¹¤ë
+$text =~ s/\n/<\$>/g ;  # ã‚‚ã¨ã‚‚ã¨ã®æ”¹è¡Œã‚’ <$> ã«å¤‰æ›ã—ã¦å‡¦ç†ã™ã‚‹
 my @text ;
-while ($text =~ s/^([a-z]+|<\$>|$eucjp|.)//){
+while ($text =~ s/^([a-z]+|<\$>|.)//){
 	push @text, $1 ;
 }
 return @text ;
@@ -156,6 +156,7 @@ mkfifo($path, 0600) or print_error_html('ERROR : open failed') ;
 my $pid = fork ;
 if ($pid == 0){
 	open(FIFO, ">$path") or print_error_html('ERROR : open failed') ;
+	utf8::encode($text) ;  # UTF-8ã‚¨ãƒ³ã‚³ãƒ¼ãƒ‰
 	print FIFO $text ;
 	close FIFO ;
 	unlink $path ;
@@ -163,7 +164,7 @@ if ($pid == 0){
 }
 } ;
 # ====================
-sub escape_char {  # < > & ' " ¤Î5Ê¸»ú¤ò¼ÂÂÖ»²¾È¤ËÊÑ´¹¤¹¤ë
+sub escape_char {  # < > & ' " ã®5æ–‡å­—ã‚’å®Ÿæ…‹å‚ç…§ã«å¤‰æ›ã™ã‚‹
 my $string = $_[0] // '' ;
 $string =~ s/\&/&amp;/g ;
 $string =~ s/</&lt;/g ;
@@ -173,21 +174,21 @@ $string =~ s/\"/&quot;/g ;  # "
 return $string ;
 } ;
 # ====================
-sub escape_space {  # ¶õÇòÊ¸»ú¤ò¼ÂÂÖ»²¾È¤ËÊÑ´¹
+sub escape_space {  # ç©ºç™½æ–‡å­—ã‚’å®Ÿæ…‹å‚ç…§ã«å¤‰æ›
 my $string = $_[0] // '' ;
-$string =~ s/\s/&nbsp;/g ;  # ¶õÇòÊ¸»ú¡Ê¥¹¥Ú¡¼¥¹¡¢¥¿¥ÖÅù´Ş¤à¡Ë¤Ï¥¹¥Ú¡¼¥¹¤È¤ß¤Ê¤¹
+$string =~ s/\s/&nbsp;/g ;  # ç©ºç™½æ–‡å­—ï¼ˆã‚¹ãƒšãƒ¼ã‚¹ã€ã‚¿ãƒ–ç­‰å«ã‚€ï¼‰ã¯ã‚¹ãƒšãƒ¼ã‚¹ã¨ã¿ãªã™
 return $string ;
 } ;
 # ====================
 sub print_html {
 my $table = $_[0] // '' ;
-print 'Content-type: text/html; charset=EUC-JP
+print 'Content-type: text/html; charset=utf-8
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html lang=ja>
 
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=EUC-JP">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta http-equiv="Content-Style-Type" content="text/css">
 <meta name="author" content="Yuki Naito">
 <title>difff output</title>
@@ -222,18 +223,18 @@ print 'Content-type: text/html; charset=EUC-JP
 exit ;
 } ;
 # ====================
-sub print_error_html {  # ¥¨¥é¡¼¥á¥Ã¥»¡¼¥¸¤òÉ½¼¨
-# ¥Ø¥Ã¥À¤Î meta http-equiv="Refresh" ¤Ç5ÉÃ¸å¤Ë¥È¥Ã¥×¥Ú¡¼¥¸¤Ë¥ê¥À¥¤¥ì¥¯¥È¤¹¤ë¡£
-# ¤Ş¤¿¤Ï¡¢javascript ¤Ç body onload ¤«¤é6ÉÃ¸å¤Ë¥È¥Ã¥×¥Ú¡¼¥¸¤Ë¥ê¥À¥¤¥ì¥¯¥È¤¹¤ë¡£
-# ¾åµ­¤¬Æ°ºî¤·¤Ê¤¤¾ì¹ç¤Ç¤â¡¢¥È¥Ã¥×¥Ú¡¼¥¸¤Ø¤Î¥ê¥ó¥¯¤òÉ½¼¨¤¹¤ë¡£
+sub print_error_html {  # ã‚¨ãƒ©ãƒ¼ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’è¡¨ç¤º
+# ãƒ˜ãƒƒãƒ€ã® meta http-equiv="Refresh" ã§5ç§’å¾Œã«ãƒˆãƒƒãƒ—ãƒšãƒ¼ã‚¸ã«ãƒªãƒ€ã‚¤ãƒ¬ã‚¯ãƒˆã™ã‚‹ã€‚
+# ã¾ãŸã¯ã€javascript ã§ body onload ã‹ã‚‰6ç§’å¾Œã«ãƒˆãƒƒãƒ—ãƒšãƒ¼ã‚¸ã«ãƒªãƒ€ã‚¤ãƒ¬ã‚¯ãƒˆã™ã‚‹ã€‚
+# ä¸Šè¨˜ãŒå‹•ä½œã—ãªã„å ´åˆã§ã‚‚ã€ãƒˆãƒƒãƒ—ãƒšãƒ¼ã‚¸ã¸ã®ãƒªãƒ³ã‚¯ã‚’è¡¨ç¤ºã™ã‚‹ã€‚
 my $error_text = $_[0] // '' ;
-print 'Content-type: text/html; charset=EUC-JP
+print 'Content-type: text/html; charset=utf-8
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=EUC-JP">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta http-equiv="Refresh" content="5;URL=.">
 <meta http-equiv="Content-Script-Type" content="text/javascript">
 <meta http-equiv="Content-Style-Type" content="text/css">
@@ -261,7 +262,7 @@ print 'Content-type: text/html; charset=EUC-JP
 ' . $error_text . '
 </em></p>
 
-<p><a href=".">¤â¤É¤ë</a></p>
+<p><a href=".">ã‚‚ã©ã‚‹</a></p>
 
 </body>
 </html>
