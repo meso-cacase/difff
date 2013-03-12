@@ -28,7 +28,7 @@ FIFO（名前付きパイプ）を作成してdiffコマンドに文書を渡し
 -----
 
 ![スクリーンショット]
-(http://g86.dbcls.jp/~meso/meme/wp-content/uploads/2012/06/GGRNA_FA.png
+(http://g86.dbcls.jp/~meso/meme/wp-content/uploads/2013/03/difff6.png
 "difff《ﾃﾞｭﾌﾌ》スクリーンショット")
 
 
@@ -44,9 +44,12 @@ FIFO（名前付きパイプ）を作成してdiffコマンドに文書を渡し
 インストール
 ------
 
-index.html と difff.pl をウェブ公開用のディレクトリに置きます。
+difff《ﾃﾞｭﾌﾌ》は単一のCGIスクリプト（difff.pl）です。
+本ファイルをウェブ公開用のディレクトリに置き、index.cgi にリンクします。
+もしくは、difff.pl を index.cgi に名前変更して置いてもかまいません。
+スクリプトには、apacheから読み出し・実行できる権限を与えてください。
 
-difff.pl の下記の部分を、環境にあわせて書き換えてください。
+また、スクリプトの下記の部分を環境にあわせて書き換えてください。
 
 ```perl
 #!/usr/bin/perl
@@ -55,13 +58,33 @@ difff.pl の下記の部分を、環境にあわせて書き換えてくださ�
 ↑ Perlのパスを調べて記載してください。
 
 ```perl
+# 保存したHTMLファイルから作業を再開できるよう、FORMの送り先に完全URLを指定
+my $url = 'http://altair.dbcls.jp/difff/' ;
+# 保存したHTMLファイルから作業を再開できなくてもよい場合は相対パスを指定
+# my $url = './' ;
+```
+
+↑ CGIの設置先を完全URLで記載してください（index.cgi は記入不要）。
+FORMタグの `action=` にこの値が入り、保存したHTMLファイルからでも
+文書をPOSTできるようになります。その必要がない場合は上記のかわりに、
+
+```perl
+# 保存したHTMLファイルから作業を再開できるよう、FORMの送り先に完全URLを指定
+# my $url = 'http://altair.dbcls.jp/difff/' ;
+# 保存したHTMLファイルから作業を再開できなくてもよい場合は相対パスを指定
+my $url = './' ;
+```
+
+のように設定してください。
+
+```perl
 my $diffcmd = '/usr/bin/diff' ;  # diffコマンドのパスを指定する
 ```
 
 ↑ diffコマンドのパスを調べて記載してください。
 
 ```perl
-my $fifodir = '/tmp' ;  # FIFOを作成するディレクトリを指定する
+my $fifodir = '/tmp' ;           # FIFOを作成するディレクトリを指定する
 ```
 
 ↑ FIFOを作成可能な、apacheからの書き込み権限のあるディレクトリを指定。
@@ -72,14 +95,37 @@ my $fifodir = '/tmp' ;  # FIFOを作成するディレクトリを指定する
 
 ```bash
 % export QUERY_STRING="sequenceA=hogehoge&sequenceB=hagehage"
-% ./difff.pl
+% ./index.cgi
 ```
 
-出力の1行目が `Content-type: text/html; charset=EUC-JP`
+出力の1行目が `Content-type: text/html; charset=utf-8`
 となっており、2行目が空白行、3行目以降にHTMLが出力されれば成功です。
 3行目以降のHTMLをファイルに書き出し、ブラウザで開いて内容を確認してください。
 
 エラーが出る場合は、エラーメッセージを参照し対処してください。
+
+
+更新履歴
+--------
+
+### 2013年3月12日 ###
+
++ トップページの入力フォームのすぐ下に結果が表示されるように変更。  
+  入力した文書と比較結果とをまとめて1つのHTMLファイルに保存できます。  
+  また保存したHTMLを開いて作業を再開することも可能です。
++ 文字数をカウントする機能を追加。
++ ハイライトの色を、見やすいけれど疲れない色に変更。  
+  ver.5と同じ緑色や、印刷に便利な白黒に切り替えることもできます。
++ 日本語の処理をPerl5.6/EUC-JPからPerl5.8/UTF-8に変更。
+
+### 2013年1月11日 ###
+
++ 英語版を公開。
+
+### 2012年10月22日 ###
+
++ difff《ﾃﾞｭﾌﾌ》ver.5のソースをGitHubで公開。
+
 
 ライセンス
 --------
