@@ -15,7 +15,7 @@ use utf8 ;
 use POSIX ;
 
 # 保存したHTMLファイルから作業を再開できるよう、FORMの送り先に完全URLを指定
-my $url = 'http://altair.dbcls.jp/difff/' ;
+my $url = 'http://altair.dbcls.jp/difff/en/' ;
 # 保存したHTMLファイルから作業を再開できなくてもよい場合は相対パスを指定
 # my $url = './' ;
 
@@ -129,8 +129,8 @@ my $lengthB = length($sequenceB) ;
 
 $table .=
 "<tr>
-	<td><font color=gray>($lengthA 文字)</font></td>
-	<td><font color=gray>($lengthB 文字)</font></td>
+	<td><font color=gray>($lengthA chars)</font></td>
+	<td><font color=gray>($lengthB chars)</font></td>
 </tr>
 " ;
 #- △ 文字数をカウントしてtableに付加
@@ -141,13 +141,13 @@ print_html(
 $table</table>
 
 <p>
-	<input type=button id='hide' value='結果のみ表示 (印刷用)' onclick='hideForm()'> |
+	<input type=button id='hide' value='Hide form (print friendly)' onclick='hideForm()'> |
 	<input type=radio name=color value=1 onclick='setColor1()' checked>
-		<span class=blue >カラー1</span>
+		<span class=blue >Color 1</span>
 	<input type=radio name=color value=2 onclick='setColor2()'>
-		<span class=green>カラー2</span>
+		<span class=green>Color 2</span>
 	<input type=radio name=color value=3 onclick='setColor3()'>
-		<span class=black>モノクロ</span>
+		<span class=black>Black &amp; White</span>
 </p>
 </div>"
 ) ;
@@ -241,19 +241,19 @@ $html =~ s{^(ERROR.*)$}{<p><font color=red>$1</font></p>}s ;
 (not $html) and $html =
 
 "<div id='news'>
-<p>新着情報：</p>
+<p>What's new:</p>
 
 <ul>
-	<li>2013-03-12　入力フォームと比較結果とを同一画面に表示 (ver.6)
-	<li>2013-01-11　<a href='http://altair.dbcls.jp/difff/en/'>英語版</a> を公開
-	<li>2012-10-22　ソースを公開 -
-		<a target='_blank' href='https://github.com/meso-cacase/difff'>GitHub</a>
-	<li>2012-04-16　GIGAZINEに掲載 -
+	<li>2013-03-12 <b>difff</b> ver.6 released.
+	<li>2013-01-11 English page launched.
+	<li>2012-10-22 Source code available via
+		<a target='_blank' href='https://github.com/meso-cacase/difff'>GitHub</a>.
+	<li>2012-04-16 <b>difff</b> was introduced by 
 		<a target='_blank' href='http://gigazine.net/news/20120416-difff/'>
-			日本語対応で簡単に差分が確認できるテキスト比較ツール「difff(ﾃﾞｭﾌﾌ)」</a>
-	<li>2012-04-13　全面リニューアル。左右で段落がずれないようにした (ver.5)
-	<li>2008-02-18　日本語対応 (ver.4)
-	<li>2004-02-19　初代 difff 完成 (ver.1)
+			GIGAZINE</a> (in Japanese).
+	<li>2012-04-13 <b>difff</b> ver.5 released.
+	<li>2008-02-18 <b>difff</b> ver.4 released. Japanese characters supported.
+	<li>2004-02-19 <b>difff</b> ver.1 released.
 </ul>
 </div>
 
@@ -265,8 +265,7 @@ $html =~ s{^(ERROR.*)$}{<p><font color=red>$1</font></p>}s ;
 
 and $sequenceA =
 
-"下記の文章を比較してください。
-   Betty Botter bought some butter, 
+"   Betty Botter bought some butter, 
 But, she said, this butter's bitter;
 If I put it in my batter,
 It will make my batter bitter,
@@ -281,8 +280,7 @@ Bought a bit of better butter."
 
 and $sequenceB =
 
-"下記の文章を，ﾋﾋ較してくだちい．
-Betty Botter bought some butter,
+"Betty Botter bought some butter,
 But, she said, the butter's bitter;
 If I put it in my batter,
 That will make my batter bitter.
@@ -304,25 +302,25 @@ print "Content-type: text/html; charset=utf-8\n\n",
 
 #-- ▽ +++++++++++++++++ HTML +++++++++++++++++++
 "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN'>
-<html lang=ja>
+<html>
 
 <head>
 <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
 <meta http-equiv='Content-Script-Type' content='text/javascript'>
 <meta http-equiv='Content-Style-Type' content='text/css'>
 <meta name='author' content='Yuki Naito'>
-<title>difff《ﾃﾞｭﾌﾌ》</title>
+<title>difff - text compare</title>
 <script type='text/javascript'>
 <!--
 	function hideForm() {
 		if (document.getElementById('form').style.display == 'none') {
 			document.getElementById('top' ).style.display = 'block';
 			document.getElementById('form').style.display = 'block';
-			document.getElementById('hide').value = '結果のみ表示 (印刷用)';
+			document.getElementById('hide').value = 'Hide form (print friendly)';
 		} else {
 			document.getElementById('top' ).style.display = 'none';
 			document.getElementById('form').style.display = 'none';
-			document.getElementById('hide').value = '全体を表示';
+			document.getElementById('hide').value = 'Show all';
 		}
 	}
 	function setColor1() {
@@ -382,22 +380,22 @@ print "Content-type: text/html; charset=utf-8\n\n",
 <div id='top' style='border-top:5px solid #00BBFF; padding-top:10px'>
 <font size=5>
 	<a class=k href='$url'>
-	テキスト比較ツール difff《ﾃﾞｭﾌﾌ》</a></font><!--
+	<b>difff</b> - online text compare </a></font><!--
 --><font size=3>ver.6</font>
 &emsp;
 <font size=1 style='vertical-align:top'>
-	<a style='vertical-align:top' href='${url}en/'>English</a> |
-	Japanese
+	English |
+	<a style='vertical-align:top' href='${url}../'>Japanese</a>
 </font>
 &emsp;
 <font size=1 style='vertical-align:top'>
-<a style='vertical-align:top' href='${url}v5/'>旧バージョン</a>
+<a style='vertical-align:top' href='${url}../v5/index_en.html'>Previous release (ver.5)</a>
 </font>
 <hr><!-- ________________________________________ -->
 </div>
 
 <div id='form'>
-<p>下の枠に比較したい文章を入れてくだちい。差分 (diff) を表示します。</p>
+<p>Input two texts below and click 'compare':</p>
 
 <form method=POST action='$url'>
 <table cellspacing=0>
@@ -407,7 +405,7 @@ print "Content-type: text/html; charset=utf-8\n\n",
 </tr>
 </table>
 
-<p><input type=submit value='比較する'></p>
+<p><input type=submit value='compare'></p>
 </form>
 </div>
 
