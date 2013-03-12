@@ -44,9 +44,9 @@ FIFO（名前付きパイプ）を作成してdiffコマンドに文書を渡し
 インストール
 ------
 
-index.html と difff.cgi をウェブ公開用のディレクトリに置きます。
+index.html と difff.pl をウェブ公開用のディレクトリに置きます。
 
-difff.cgi の下記の部分を、環境にあわせて書き換えてください。
+difff.pl の下記の部分を、環境にあわせて書き換えてください。
 
 ```perl
 #!/usr/bin/perl
@@ -72,7 +72,7 @@ my $fifodir = '/tmp' ;  # FIFOを作成するディレクトリを指定する
 
 ```bash
 % export QUERY_STRING="sequenceA=hogehoge&sequenceB=hagehage"
-% ./difff.cgi
+% ./difff.pl
 ```
 
 出力の1行目が `Content-type: text/html; charset=EUC-JP`
