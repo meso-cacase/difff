@@ -245,9 +245,12 @@ $html =~ s{^(ERROR.*)$}{<p><font color=red>$1</font></p>}s ;
 
 <ul>
 	<li>2013-03-12 <b>difff</b> ver.6 released.
+		<a target='_blank' href='http://g86.dbcls.jp/~meso/meme/?p=2313'>
+			Release note</a> (in Japanese).
 	<li>2013-01-11 English page launched.
 	<li>2012-10-22 Source code available via
-		<a target='_blank' href='https://github.com/meso-cacase/difff'>GitHub</a>.
+		<a target='_blank' href='https://github.com/meso-cacase/difff'>
+			GitHub</a>.
 	<li>2012-04-16 <b>difff</b> was introduced by 
 		<a target='_blank' href='http://gigazine.net/news/20120416-difff/'>
 			GIGAZINE</a> (in Japanese).
@@ -259,7 +262,7 @@ $html =~ s{^(ERROR.*)$}{<p><font color=red>$1</font></p>}s ;
 
 <hr><!-- ________________________________________ -->
 
-<p><font color=gray>Last modified on Mar 12, 2013 by
+<p><font color=gray>Last modified on Mar 13, 2013 by
 <a target='_blank' href='http://twitter.com/meso_cacase'>\@meso_cacase</a> at
 <a target='_blank' href='http://dbcls.rois.ac.jp/'>DBCLS</a></font></p>"
 
