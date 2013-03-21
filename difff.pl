@@ -121,16 +121,23 @@ foreach (0..$par-1){
 }
 
 #- ▽ 文字数をカウントしてtableに付加
-$sequenceA =~ tr/\r//d ;  # 文字数カウントのためCRを除去
-my $lengthA = length($sequenceA) ;
-
-$sequenceB =~ tr/\r//d ;  # 文字数カウントのためCRを除去
-my $lengthB = length($sequenceB) ;
+my ($count1_A, $count2_A, $count3_A, $wcount_A) = count_char($sequenceA) ;
+my ($count1_B, $count2_B, $count3_B, $wcount_B) = count_char($sequenceB) ;
 
 $table .=
 "<tr>
-	<td><font color=gray>($lengthA 文字)</font></td>
-	<td><font color=gray>($lengthB 文字)</font></td>
+	<td><font color=gray>
+		文字数: $count1_A<br>
+		空白数: @{[$count2_A - $count1_A]} 空白込み文字数: $count2_A<br>
+		改行数: @{[$count3_A - $count2_A]} 改行込み文字数: $count3_A<br>
+		単語数: $wcount_A
+	</font></td>
+	<td><font color=gray>
+		文字数: $count1_B<br>
+		空白数: @{[$count2_B - $count1_B]} 空白込み文字数: $count2_B<br>
+		改行数: @{[$count3_B - $count2_B]} 改行込み文字数: $count3_B<br>
+		単語数: $wcount_B
+	</font></td>
 </tr>
 " ;
 #- △ 文字数をカウントしてtableに付加
@@ -221,6 +228,34 @@ sub escape_space {  # 空白文字を実態参照に変換
 my $string = $_[0] // '' ;
 $string =~ s/\s/&nbsp;/g ;  # 空白文字（スペース、タブ等含む）はスペースとみなす
 return $string ;
+} ;
+# ====================
+sub count_char {  # 文字数をカウント
+
+#- ▼ メモ
+# $count1: 改行空白なし文字数
+# $count2: 空白あり文字数
+# $count3: 改行空白あり文字数
+# $wcount: 単語数
+#- ▲ メモ
+
+my $text = $_[0] // '' ;
+
+#- ▼ 単語数をカウント
+my $words = $text ;
+my $wcount = ($words =~ s/\s*\S+//g) ;
+#- ▲ 単語数をカウント
+
+#- ▼ 文字数をカウント
+$text =~ tr/\r//d ;  # カウントの準備: CRを除去
+my $count3 = length($text) ;
+$text =~ tr/\n//d ;  # 改行を除去してカウント
+my $count2 = length($text) ;
+$text =~ s/\s//g ;   # 空白文字を除去してカウント
+my $count1 = length($text) ;
+#- ▲ 文字数をカウント
+
+return ($count1, $count2, $count3, $wcount) ;
 } ;
 # ====================
 sub print_html {  # HTMLを出力
