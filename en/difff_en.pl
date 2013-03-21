@@ -167,7 +167,7 @@ if (defined $ENV{'REQUEST_METHOD'} and
 } elsif (defined $ENV{'QUERY_STRING'}){
 	$buffer = $ENV{'QUERY_STRING'} ;
 }
-length $buffer > 100000 and print_html('ERROR : input too large') ;
+length $buffer > 1000000 and print_html('ERROR : input too large') ;
 my %query ;
 my @query = split /&/, $buffer ;
 foreach (@query){
@@ -262,7 +262,7 @@ $html =~ s{^(ERROR.*)$}{<p><font color=red>$1</font></p>}s ;
 
 <hr><!-- ________________________________________ -->
 
-<p><font color=gray>Last modified on Mar 13, 2013 by
+<p><font color=gray>Last modified on Mar 21, 2013 by
 <a target='_blank' href='http://twitter.com/meso_cacase'>\@meso_cacase</a> at
 <a target='_blank' href='http://dbcls.rois.ac.jp/'>DBCLS</a></font></p>"
 
