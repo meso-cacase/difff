@@ -297,7 +297,7 @@ $html =~ s{^(ERROR.*)$}{<p><font color=red>$1</font></p>}s ;
 
 <hr><!-- ________________________________________ -->
 
-<p><font color=gray>Last modified on Mar 21, 2013 by
+<p><font color=gray>Last modified on Apr 5, 2013 by
 <a target='_blank' href='http://twitter.com/meso_cacase'>\@meso_cacase</a> at
 <a target='_blank' href='http://dbcls.rois.ac.jp/'>DBCLS</a></font></p>"
 
@@ -364,14 +364,14 @@ print "Content-type: text/html; charset=utf-8\n\n",
 		}
 	}
 	function setColor1() {
-		document.getElementById('top').style.borderTop = '5px solid #FF8090';
+		document.getElementById('top').style.borderTop = '5px solid #00BBFF';
 		var emList = document.getElementsByTagName('em');
 		for (i = 0; i < emList.length; i++) {
 			emList[i].className = 'blue' ;
 		}
 	}
 	function setColor2() {
-		document.getElementById('top').style.borderTop = '5px solid #00BB00';
+		document.getElementById('top').style.borderTop = '5px solid #00bb00';
 		var emList = document.getElementsByTagName('em');
 		for (i = 0; i < emList.length; i++) {
 			emList[i].className = 'green' ;
@@ -395,7 +395,7 @@ print "Content-type: text/html; charset=utf-8\n\n",
 	.k { color:black; text-decoration:none }
 	em { font-style:normal }
 	em,
-	.blue  { font-weight:bold; color:black; background:#FFDDEE; border:1px solid #FF4444 }
+	.blue  { font-weight:bold; color:black; background:#99EEFF; border:1px solid #00BBFF }
 	.green { font-weight:bold; color:black; background:#99FF99; border:none }
 	.black { font-weight:bold; color:white; background:black;   border:none }
 	table {
@@ -417,7 +417,7 @@ print "Content-type: text/html; charset=utf-8\n\n",
 
 <body>
 
-<div id='top' style='border-top:5px solid #FF8090; padding-top:10px'>
+<div id='top' style='border-top:5px solid #00BBFF; padding-top:10px'>
 <font size=5>
 	<a class=k href='$url'>
 	テキスト比較ツール difff《ﾃﾞｭﾌﾌ》</a></font><!--
@@ -435,8 +435,7 @@ print "Content-type: text/html; charset=utf-8\n\n",
 </div>
 
 <div id='form'>
-<p>下の枠に比較したい文章を入れてくだちい。差分 (diff) を表示します。<br>
-季節限定で<span class=blue>桜色</span>の ﾃﾞｭﾌﾌ をお楽しみください。(2013/03/21)</p>
+<p>下の枠に比較したい文章を入れてくだちい。差分 (diff) を表示します。</p>
 
 <form method=POST action='$url'>
 <table cellspacing=0>
