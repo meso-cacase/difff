@@ -19,8 +19,8 @@ my $url = 'http://altair.dbcls.jp/difff/' ;
 # 保存したHTMLファイルから作業を再開できなくてもよい場合は相対パスを指定
 # my $url = './' ;
 
-my $diffcmd = '/usr/bin/diff' ;  # diffコマンドのパスを指定する
-my $fifodir = '/tmp' ;           # FIFOを作成するディレクトリを指定する
+my $diffcmd = '/usr/bin/diff' ;  # diffコマンドのパスを指定
+my $fifodir = '/tmp' ;           # FIFOを作成するディレクトリを指定
 
 binmode STDOUT, ':utf8' ;        # 標準出力をUTF-8エンコード
 binmode STDERR, ':utf8' ;        # 標準エラー出力をUTF-8エンコード
@@ -57,7 +57,7 @@ my @diffsummary = grep /(^[^<>-]|<\$>)/, @diffout ;
 
 # ▼ 差分の検出とHTMLタグの埋め込み
 my ($a_start, $a_end, $b_start, $b_end) = (0, 0, 0, 0) ;
-foreach (@diffsummary){  # 異なる部分をハイライト表示する
+foreach (@diffsummary){  # 異なる部分をハイライト表示
 	if ($_ =~ /^((\d+),)?(\d+)c(\d+)(,(\d+))?$/){       # 置換している場合
 		$a_end   = $3 || 0 ;
 		$a_start = $2 || $a_end ;
@@ -96,8 +96,8 @@ my $a_final = join '', @a_split ;
 my $b_final = join '', @b_split ;
 
 # 変更箇所が<td>をまたぐ場合の処理
-while ( $a_final =~ s{(<em>[^<>]*)<\$>(([^<>]|<\$>)*</em>)}{$1</em><\$><em>$2}g ){}
-while ( $b_final =~ s{(<em>[^<>]*)<\$>(([^<>]|<\$>)*</em>)}{$1</em><\$><em>$2}g ){}
+$a_final =~ s{(<em>[^<>]*)<\$>(([^<>]|<\$>)*</em>)}{$1</em><\$><em>$2}g ;
+$b_final =~ s{(<em>[^<>]*)<\$>(([^<>]|<\$>)*</em>)}{$1</em><\$><em>$2}g ;
 
 my @a_final = split /<\$>/, $a_final ;
 my @b_final = split /<\$>/, $b_final ;
@@ -201,11 +201,11 @@ return @text ;
 # ====================
 sub fifo_send {  # usage: fifo_send($text, $path) ;
 my $text = $_[0] // '' ;
-my $path = $_[1] or print_html('ERROR : open failed') ;
-mkfifo($path, 0600) or print_html('ERROR : open failed') ;
+my $path = $_[1] or print_html('ERROR : open failed (1)') ;
+mkfifo($path, 0600) or print_html('ERROR : open failed (2)') ;
 my $pid = fork ;
 if ($pid == 0){
-	open(FIFO, ">$path") or print_html('ERROR : open failed') ;
+	open(FIFO, ">$path") or print_html('ERROR : open failed (3)') ;
 	utf8::encode($text) ;  # UTF-8エンコード
 	print FIFO $text ;
 	close FIFO ;
