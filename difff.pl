@@ -95,9 +95,9 @@ foreach (@diffsummary){  # 異なる部分をハイライト表示
 my $a_final = join '', @a_split ;
 my $b_final = join '', @b_split ;
 
-# 変更箇所が<td>をまたぐ場合の処理
-$a_final =~ s{(<em>[^<>]*)<\$>(([^<>]|<\$>)*</em>)}{$1</em><\$><em>$2}g ;
-$b_final =~ s{(<em>[^<>]*)<\$>(([^<>]|<\$>)*</em>)}{$1</em><\$><em>$2}g ;
+# 変更箇所が<td>をまたぐ場合の処理、該当箇所がなくなるまで繰り返し適用
+while ( $a_final =~ s{(<em>[^<>]*)<\$>(([^<>]|<\$>)*</em>)}{$1</em><\$><em>$2}g ){}
+while ( $b_final =~ s{(<em>[^<>]*)<\$>(([^<>]|<\$>)*</em>)}{$1</em><\$><em>$2}g ){}
 
 my @a_final = split /<\$>/, $a_final ;
 my @b_final = split /<\$>/, $b_final ;
