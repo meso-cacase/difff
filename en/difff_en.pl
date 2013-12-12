@@ -279,6 +279,9 @@ $html =~ s{^(ERROR.*)$}{<p><font color=red>$1</font></p>}s ;
 <p>What's new:</p>
 
 <ul>
+	<li>2013-12-12 <b>difff</b> was introduced by 
+		<a target='_blank' href='http://togotv.dbcls.jp/20130828.html'>
+			TogoTV</a> (in Japanese).
 	<li>2013-03-12 <b>difff</b> ver.6 released.
 		<a target='_blank' href='http://g86.dbcls.jp/~meso/meme/?p=2313'>
 			Release note</a> (in Japanese).
@@ -297,7 +300,7 @@ $html =~ s{^(ERROR.*)$}{<p><font color=red>$1</font></p>}s ;
 
 <hr><!-- ________________________________________ -->
 
-<p><font color=gray>Last modified on Apr 5, 2013 by
+<p><font color=gray>Last modified on Dec 12, 2013 by
 <a target='_blank' href='http://twitter.com/meso_cacase'>\@meso_cacase</a> at
 <a target='_blank' href='http://dbcls.rois.ac.jp/'>DBCLS</a></font></p>"
 

@@ -279,6 +279,9 @@ $html =~ s{^(ERROR.*)$}{<p><font color=red>$1</font></p>}s ;
 <p>新着情報：</p>
 
 <ul>
+	<li>2013-12-12　使い方の動画 -
+		<a target='_blank' href='http://togotv.dbcls.jp/20130828.html'>
+			difff《ﾃﾞｭﾌﾌ》を使って文章の変更箇所を調べる</a>
 	<li>2013-03-12　全面リニューアル (ver.6) -
 		<a target='_blank' href='http://g86.dbcls.jp/~meso/meme/?p=2313'>
 			変更点</a>
@@ -297,7 +300,7 @@ $html =~ s{^(ERROR.*)$}{<p><font color=red>$1</font></p>}s ;
 
 <hr><!-- ________________________________________ -->
 
-<p><font color=gray>Last modified on Apr 5, 2013 by
+<p><font color=gray>Last modified on Dec 12, 2013 by
 <a target='_blank' href='http://twitter.com/meso_cacase'>\@meso_cacase</a> at
 <a target='_blank' href='http://dbcls.rois.ac.jp/'>DBCLS</a></font></p>"
 
