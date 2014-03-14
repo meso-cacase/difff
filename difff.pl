@@ -15,7 +15,7 @@ use utf8 ;
 use POSIX ;
 
 # 保存したHTMLファイルから作業を再開できるよう、FORMの送り先に完全URLを指定
-my $url = 'http://altair.dbcls.jp/difff/' ;
+my $url = 'http://difff.jp/' ;
 # 保存したHTMLファイルから作業を再開できなくてもよい場合は相対パスを指定
 # my $url = './' ;
 
@@ -279,17 +279,21 @@ $html =~ s{^(ERROR.*)$}{<p><font color=red>$1</font></p>}s ;
 <p>新着情報：</p>
 
 <ul>
+	<li>2014-03-14　トップページURLを <a href='http://difff.jp/'>http://difff.jp/</a> に変更
+	<li>2014-03-12　ITmediaニュース -
+		<a target='_blank' href='http://www.itmedia.co.jp/news/articles/1403/12/news121.html'>
+			STAP細胞問題で活躍、テキスト比較ツール「デュフフ」とは</a>
 	<li>2013-12-12　使い方の動画 -
 		<a target='_blank' href='http://togotv.dbcls.jp/20130828.html'>
 			difff《ﾃﾞｭﾌﾌ》を使って文章の変更箇所を調べる</a>
 	<li>2013-03-12　全面リニューアル (ver.6) -
 		<a target='_blank' href='http://g86.dbcls.jp/~meso/meme/?p=2313'>
 			変更点</a>
-	<li>2013-01-11　<a href='http://altair.dbcls.jp/difff/en/'>英語版</a> を公開
+	<li>2013-01-11　<a href='http://difff.jp/en/'>英語版</a> を公開
 	<li>2012-10-22　ソースを公開 -
 		<a target='_blank' href='https://github.com/meso-cacase/difff'>
 			GitHub</a>
-	<li>2012-04-16　GIGAZINEに掲載 -
+	<li>2012-04-16　GIGAZINE -
 		<a target='_blank' href='http://gigazine.net/news/20120416-difff/'>
 			日本語対応で簡単に差分が確認できるテキスト比較ツール「difff(ﾃﾞｭﾌﾌ)」</a>
 	<li>2012-04-13　全面リニューアル。左右で段落がずれないようにした (ver.5)
@@ -300,9 +304,9 @@ $html =~ s{^(ERROR.*)$}{<p><font color=red>$1</font></p>}s ;
 
 <hr><!-- ________________________________________ -->
 
-<p><font color=gray>Last modified on Dec 12, 2013 by
-<a target='_blank' href='http://twitter.com/meso_cacase'>\@meso_cacase</a> at
-<a target='_blank' href='http://dbcls.rois.ac.jp/'>DBCLS</a></font></p>"
+<p><font color=gray>Last modified on Mar 14, 2014 by
+<a target='_blank' href='http://twitter.com/meso_cacase'>\@meso_cacase</a>
+</font></p>"
 
 and $sequenceA =
 

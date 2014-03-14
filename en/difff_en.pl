@@ -15,7 +15,7 @@ use utf8 ;
 use POSIX ;
 
 # 保存したHTMLファイルから作業を再開できるよう、FORMの送り先に完全URLを指定
-my $url = 'http://altair.dbcls.jp/difff/en/' ;
+my $url = 'http://difff.jp/en/' ;
 # 保存したHTMLファイルから作業を再開できなくてもよい場合は相対パスを指定
 # my $url = './' ;
 
@@ -279,6 +279,10 @@ $html =~ s{^(ERROR.*)$}{<p><font color=red>$1</font></p>}s ;
 <p>What's new:</p>
 
 <ul>
+	<li>2014-03-14 URL has been changed: <a href='http://difff.jp/'>http://difff.jp/</a>
+	<li>2014-03-12 <b>difff</b> was introduced by 
+		<a target='_blank' href='http://www.itmedia.co.jp/news/articles/1403/12/news121.html'>
+			ITmedia news</a> (in Japanese).
 	<li>2013-12-12 <b>difff</b> was introduced by 
 		<a target='_blank' href='http://togotv.dbcls.jp/20130828.html'>
 			TogoTV</a> (in Japanese).
@@ -300,9 +304,9 @@ $html =~ s{^(ERROR.*)$}{<p><font color=red>$1</font></p>}s ;
 
 <hr><!-- ________________________________________ -->
 
-<p><font color=gray>Last modified on Dec 12, 2013 by
-<a target='_blank' href='http://twitter.com/meso_cacase'>\@meso_cacase</a> at
-<a target='_blank' href='http://dbcls.rois.ac.jp/'>DBCLS</a></font></p>"
+<p><font color=gray>Last modified on Mar 14, 2014 by
+<a target='_blank' href='http://twitter.com/meso_cacase'>\@meso_cacase</a>
+</font></p>"
 
 and $sequenceA =
 
