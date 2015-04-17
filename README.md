@@ -135,7 +135,7 @@ my $fifodir = '/tmp' ;           # FIFOを作成するディレクトリを指�
 ライセンス
 --------
 
-Copyright &copy; 2004-2013 Yuki Naito
+Copyright &copy; 2004-2015 Yuki Naito
  ([@meso_cacase](http://twitter.com/meso_cacase))  
 This software is distributed under [modified BSD license]
  (http://www.opensource.org/licenses/bsd-license.php).
