@@ -19,8 +19,8 @@ my $url = 'http://difff.jp/en/' ;
 # 保存したHTMLファイルから作業を再開できなくてもよい場合は相対パスを指定
 # my $url = './' ;
 
-my $diffcmd = '/usr/bin/diff' ;  # diffコマンドのパスを指定する
-my $fifodir = '/tmp' ;           # FIFOを作成するディレクトリを指定する
+my $diffcmd = '/usr/bin/diff' ;  # diffコマンドのパスを指定
+my $fifodir = '/tmp' ;           # FIFOを作成するディレクトリを指定
 
 binmode STDOUT, ':utf8' ;        # 標準出力をUTF-8エンコード
 binmode STDERR, ':utf8' ;        # 標準エラー出力をUTF-8エンコード
@@ -57,7 +57,7 @@ my @diffsummary = grep /(^[^<>-]|<\$>)/, @diffout ;
 
 # ▼ 差分の検出とHTMLタグの埋め込み
 my ($a_start, $a_end, $b_start, $b_end) = (0, 0, 0, 0) ;
-foreach (@diffsummary){  # 異なる部分をハイライト表示する
+foreach (@diffsummary){  # 異なる部分をハイライト表示
 	if ($_ =~ /^((\d+),)?(\d+)c(\d+)(,(\d+))?$/){       # 置換している場合
 		$a_end   = $3 || 0 ;
 		$a_start = $2 || $a_end ;
@@ -95,7 +95,7 @@ foreach (@diffsummary){  # 異なる部分をハイライト表示する
 my $a_final = join '', @a_split ;
 my $b_final = join '', @b_split ;
 
-# 変更箇所が<td>をまたぐ場合の処理
+# 変更箇所が<td>をまたぐ場合の処理、該当箇所がなくなるまで繰り返し適用
 while ( $a_final =~ s{(<em>[^<>]*)<\$>(([^<>]|<\$>)*</em>)}{$1</em><\$><em>$2}g ){}
 while ( $b_final =~ s{(<em>[^<>]*)<\$>(([^<>]|<\$>)*</em>)}{$1</em><\$><em>$2}g ){}
 
@@ -124,8 +124,8 @@ foreach (0..$par-1){
 my ($count1_A, $count2_A, $count3_A, $wcount_A) = count_char($sequenceA) ;
 my ($count1_B, $count2_B, $count3_B, $wcount_B) = count_char($sequenceB) ;
 
-$table .=
-"<tr>
+$table .= <<"--EOS--" ;
+<tr>
 	<td><font color=gray>
 		$wcount_A words<br>
 		$count1_A chars<br>
@@ -139,16 +139,16 @@ $table .=
 		@{[$count3_B - $count2_B]} linefeeds (sum: $count3_B chars)
 	</font></td>
 </tr>
-" ;
+--EOS--
 #- △ 文字数をカウントしてtableに付加
 
-print_html(
-"<div id='result'>
+my $message = <<"--EOS--" ;
+<div id=result>
 <table cellspacing=0>
 $table</table>
 
 <p>
-	<input type=button id='hide' value='Hide form (print friendly)' onclick='hideForm()'> |
+	<input type=button id=hide value='Hide form (print friendly)' onclick='hideForm()'> |
 	<input type=radio name=color value=1 onclick='setColor1()' checked>
 		<span class=blue >Color 1</span>
 	<input type=radio name=color value=2 onclick='setColor2()'>
@@ -156,8 +156,10 @@ $table</table>
 	<input type=radio name=color value=3 onclick='setColor3()'>
 		<span class=black>Black &amp; White</span>
 </p>
-</div>"
-) ;
+</div>
+--EOS--
+
+print_html($message) ;
 # ▲ 比較結果のブロックを生成してHTMLを出力
 
 exit ;
@@ -201,11 +203,11 @@ return @text ;
 # ====================
 sub fifo_send {  # usage: fifo_send($text, $path) ;
 my $text = $_[0] // '' ;
-my $path = $_[1] or print_html('ERROR : open failed') ;
-mkfifo($path, 0600) or print_html('ERROR : open failed') ;
+my $path = $_[1] or print_html('ERROR : open failed (1)') ;
+mkfifo($path, 0600) or print_html('ERROR : open failed (2)') ;
 my $pid = fork ;
 if ($pid == 0){
-	open(FIFO, ">$path") or print_html('ERROR : open failed') ;
+	open(FIFO, ">$path") or print_html('ERROR : open failed (3)') ;
 	utf8::encode($text) ;  # UTF-8エンコード
 	print FIFO $text ;
 	close FIFO ;
@@ -266,16 +268,15 @@ sub print_html {  # HTMLを出力
 # ・引数がない場合はトップページを出力
 #- ▲ メモ
 
-my $html = $_[0] // '' ;
+my $message = $_[0] // '' ;
 
 #- ▼ エラーページ：引数が ERROR で始まる場合
-$html =~ s{^(ERROR.*)$}{<p><font color=red>$1</font></p>}s ;
+$message =~ s{^(ERROR.*)$}{<p><font color=red>$1</font></p>}s ;
 #- ▲ エラーページ：引数が ERROR で始まる場合
 
 #- ▼ トップページ：引数がない場合
-(not $html) and $html =
-
-"<div id='news'>
+(not $message) and $message = <<'--EOS--'
+<div id=news>
 <p>What's new:</p>
 
 <ul>
@@ -287,7 +288,7 @@ $html =~ s{^(ERROR.*)$}{<p><font color=red>$1</font></p>}s ;
 		<a target='_blank' href='http://togotv.dbcls.jp/20130828.html'>
 			TogoTV</a> (in Japanese).
 	<li>2013-03-12 <b>difff</b> ver.6 released.
-		<a target='_blank' href='http://g86.dbcls.jp/~meso/meme/?p=2313'>
+		<a target='_blank' href='http://g86.dbcls.jp/~meso/meme/archives/2313'>
 			Release note</a> (in Japanese).
 	<li>2013-01-11 English page launched.
 	<li>2012-10-22 Source code available via
@@ -305,12 +306,12 @@ $html =~ s{^(ERROR.*)$}{<p><font color=red>$1</font></p>}s ;
 <hr><!-- ________________________________________ -->
 
 <p><font color=gray>Last modified on Apr 17, 2015 by
-<a target='_blank' href='http://twitter.com/meso_cacase'>\@meso_cacase</a>
-</font></p>"
+<a target='_blank' href='http://twitter.com/meso_cacase'>@meso_cacase</a>
+</font></p>
+--EOS--
 
-and $sequenceA =
-
-"   Betty Botter bought some butter, 
+and $sequenceA = <<'--EOS--'
+   Betty Botter bought some butter, 
 But, she said, this butter's bitter;
 If I put it in my batter,
 It will make my batter bitter,
@@ -321,11 +322,11 @@ Better than her bitter butter,
 And she put it in her batter,
 And it made her batter better,
 So 'twas better Betty Botter
-Bought a bit of better butter."
+Bought a bit of better butter.
+--EOS--
 
-and $sequenceB =
-
-"Betty Botter bought some butter,
+and $sequenceB = <<'--EOS--' ;
+Betty Botter bought some butter,
 But, she said, the butter's bitter;
 If I put it in my batter,
 That will make my batter bitter.
@@ -336,17 +337,16 @@ Better than her bitter butter.
 And she put it in her batter,
 And it made her batter better.
 So it was better Betty Botter
-Bought a bit of better butter." ;
+Bought a bit of better butter.
+--EOS--
 #- ▲ トップページ：引数がない場合
 
 #- ▼ HTML出力
 $sequenceA = escape_char($sequenceA) ;  # XSS対策
 $sequenceB = escape_char($sequenceB) ;  # XSS対策
 
-print "Content-type: text/html; charset=utf-8\n\n",
-
-#-- ▽ +++++++++++++++++ HTML +++++++++++++++++++
-"<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN'>
+my $html = <<"--EOS--" ;
+<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN'>
 <html>
 
 <head>
@@ -422,7 +422,7 @@ print "Content-type: text/html; charset=utf-8\n\n",
 
 <body>
 
-<div id='top' style='border-top:5px solid #00BBFF; padding-top:10px'>
+<div id=top style='border-top:5px solid #00BBFF; padding-top:10px'>
 <font size=5>
 	<a class=k href='$url'>
 	<b>difff</b> - online text compare </a></font><!--
@@ -439,7 +439,7 @@ print "Content-type: text/html; charset=utf-8\n\n",
 <hr><!-- ________________________________________ -->
 </div>
 
-<div id='form'>
+<div id=form>
 <p>Input two texts below and click 'compare':</p>
 
 <form method=POST action='$url'>
@@ -454,12 +454,13 @@ print "Content-type: text/html; charset=utf-8\n\n",
 </form>
 </div>
 
-$html
+$message
 
 </body>
 </html>
-" ;
-#-- △ +++++++++++++++++ HTML +++++++++++++++++++
+--EOS--
+
+print "Content-type: text/html; charset=utf-8\n\n$html" ;
 #- ▲ HTML出力
 
 exit ;

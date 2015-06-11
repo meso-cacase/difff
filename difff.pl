@@ -124,8 +124,8 @@ foreach (0..$par-1){
 my ($count1_A, $count2_A, $count3_A, $wcount_A) = count_char($sequenceA) ;
 my ($count1_B, $count2_B, $count3_B, $wcount_B) = count_char($sequenceB) ;
 
-$table .=
-"<tr>
+$table .= <<"--EOS--" ;
+<tr>
 	<td><font color=gray>
 		文字数: $count1_A<br>
 		空白数: @{[$count2_A - $count1_A]} 空白込み文字数: $count2_A<br>
@@ -139,16 +139,16 @@ $table .=
 		単語数: $wcount_B
 	</font></td>
 </tr>
-" ;
+--EOS--
 #- △ 文字数をカウントしてtableに付加
 
-print_html(
-"<div id='result'>
+my $message = <<"--EOS--" ;
+<div id=result>
 <table cellspacing=0>
 $table</table>
 
 <p>
-	<input type=button id='hide' value='結果のみ表示 (印刷用)' onclick='hideForm()'> |
+	<input type=button id=hide value='結果のみ表示 (印刷用)' onclick='hideForm()'> |
 	<input type=radio name=color value=1 onclick='setColor1()' checked>
 		<span class=blue >カラー1</span>
 	<input type=radio name=color value=2 onclick='setColor2()'>
@@ -156,8 +156,10 @@ $table</table>
 	<input type=radio name=color value=3 onclick='setColor3()'>
 		<span class=black>モノクロ</span>
 </p>
-</div>"
-) ;
+</div>
+--EOS--
+
+print_html($message) ;
 # ▲ 比較結果のブロックを生成してHTMLを出力
 
 exit ;
@@ -266,16 +268,15 @@ sub print_html {  # HTMLを出力
 # ・引数がない場合はトップページを出力
 #- ▲ メモ
 
-my $html = $_[0] // '' ;
+my $message = $_[0] // '' ;
 
 #- ▼ エラーページ：引数が ERROR で始まる場合
-$html =~ s{^(ERROR.*)$}{<p><font color=red>$1</font></p>}s ;
+$message =~ s{^(ERROR.*)$}{<p><font color=red>$1</font></p>}s ;
 #- ▲ エラーページ：引数が ERROR で始まる場合
 
 #- ▼ トップページ：引数がない場合
-(not $html) and $html =
-
-"<div id='news'>
+(not $message) and $message = <<'--EOS--'
+<div id=news>
 <p>新着情報：</p>
 
 <ul>
@@ -287,7 +288,7 @@ $html =~ s{^(ERROR.*)$}{<p><font color=red>$1</font></p>}s ;
 		<a target='_blank' href='http://togotv.dbcls.jp/20130828.html'>
 			difff《ﾃﾞｭﾌﾌ》を使って文章の変更箇所を調べる</a>
 	<li>2013-03-12　全面リニューアル (ver.6) -
-		<a target='_blank' href='http://g86.dbcls.jp/~meso/meme/?p=2313'>
+		<a target='_blank' href='http://g86.dbcls.jp/~meso/meme/archives/2313'>
 			変更点</a>
 	<li>2013-01-11　<a href='http://difff.jp/en/'>英語版</a> を公開
 	<li>2012-10-22　ソースを公開 -
@@ -305,12 +306,12 @@ $html =~ s{^(ERROR.*)$}{<p><font color=red>$1</font></p>}s ;
 <hr><!-- ________________________________________ -->
 
 <p><font color=gray>Last modified on Apr 17, 2015 by
-<a target='_blank' href='http://twitter.com/meso_cacase'>\@meso_cacase</a>
-</font></p>"
+<a target='_blank' href='http://twitter.com/meso_cacase'>@meso_cacase</a>
+</font></p>
+--EOS--
 
-and $sequenceA =
-
-"下記の文章を比較してください。
+and $sequenceA = <<'--EOS--'
+下記の文章を比較してください。
    Betty Botter bought some butter, 
 But, she said, this butter's bitter;
 If I put it in my batter,
@@ -322,11 +323,11 @@ Better than her bitter butter,
 And she put it in her batter,
 And it made her batter better,
 So 'twas better Betty Botter
-Bought a bit of better butter."
+Bought a bit of better butter.
+--EOS--
 
-and $sequenceB =
-
-"下記の文章を，ﾋﾋ較してくだちい．
+and $sequenceB = <<'--EOS--' ;
+下記の文章を，ﾋﾋ較してくだちい．
 Betty Botter bought some butter,
 But, she said, the butter's bitter;
 If I put it in my batter,
@@ -338,17 +339,16 @@ Better than her bitter butter.
 And she put it in her batter,
 And it made her batter better.
 So it was better Betty Botter
-Bought a bit of better butter." ;
+Bought a bit of better butter.
+--EOS--
 #- ▲ トップページ：引数がない場合
 
 #- ▼ HTML出力
 $sequenceA = escape_char($sequenceA) ;  # XSS対策
 $sequenceB = escape_char($sequenceB) ;  # XSS対策
 
-print "Content-type: text/html; charset=utf-8\n\n",
-
-#-- ▽ +++++++++++++++++ HTML +++++++++++++++++++
-"<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN'>
+my $html = <<"--EOS--" ;
+<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN'>
 <html lang=ja>
 
 <head>
@@ -424,7 +424,7 @@ print "Content-type: text/html; charset=utf-8\n\n",
 
 <body>
 
-<div id='top' style='border-top:5px solid #00BBFF; padding-top:10px'>
+<div id=top style='border-top:5px solid #00BBFF; padding-top:10px'>
 <font size=5>
 	<a class=k href='$url'>
 	テキスト比較ツール difff《ﾃﾞｭﾌﾌ》</a></font><!--
@@ -441,7 +441,7 @@ print "Content-type: text/html; charset=utf-8\n\n",
 <hr><!-- ________________________________________ -->
 </div>
 
-<div id='form'>
+<div id=form>
 <p>下の枠に比較したい文章を入れてくだちい。差分 (diff) を表示します。</p>
 
 <form method=POST action='$url'>
@@ -456,12 +456,13 @@ print "Content-type: text/html; charset=utf-8\n\n",
 </form>
 </div>
 
-$html
+$message
 
 </body>
 </html>
-" ;
-#-- △ +++++++++++++++++ HTML +++++++++++++++++++
+--EOS--
+
+print "Content-type: text/html; charset=utf-8\n\n$html" ;
 #- ▲ HTML出力
 
 exit ;
