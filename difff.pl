@@ -300,6 +300,7 @@ $message =~ s{^(ERROR.*)$}{<p><font color=red>$1</font></p>}s ;
 <p>新着情報：</p>
 
 <ul>
+	<li>2015-06-17　ﾃﾞｭﾌﾌの結果を公開する機能を追加
 	<li>2014-03-14　トップページURLを <a href='http://difff.jp/'>http://difff.jp/</a> に変更
 	<li>2014-03-12　ITmediaニュース -
 		<a target='_blank' href='http://www.itmedia.co.jp/news/articles/1403/12/news121.html'>
@@ -325,7 +326,7 @@ $message =~ s{^(ERROR.*)$}{<p><font color=red>$1</font></p>}s ;
 
 <hr><!-- ________________________________________ -->
 
-<p><font color=gray>Last modified on Apr 17, 2015 by
+<p><font color=gray>Last modified on Jun 17, 2015 by
 <a target='_blank' href='http://twitter.com/meso_cacase'>@meso_cacase</a>
 </font></p>
 --EOS--
