@@ -170,6 +170,8 @@ $table</table>
 </table>
 
 <input type=submit onclick='return deletehtml();' value='削除する'>
+
+<p>この機能はテスト運用中のものです。予告なく提供を中止することがあります。</p>
 </form>
 </div>
 --EOS--
@@ -389,7 +391,7 @@ my $html = <<"--EOS--" ;
 <font size=5>
 	<a class=k href='$url'>
 	テキスト比較ツール difff《ﾃﾞｭﾌﾌ》</a></font><!--
---><font size=3>ver.6</font>
+--><font size=3>ver.6.1</font>
 &emsp;
 <font size=1 style='vertical-align:top'>
 	<a style='vertical-align:top' href='${url}en/'>English</a> |

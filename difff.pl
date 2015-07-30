@@ -8,6 +8,7 @@
 # 2012-10-22 Yuki Naito (@meso_cacase)
 # 2013-03-07 Yuki Naito (@meso_cacase) 日本語処理をPerl5.8/UTF-8に変更
 # 2013-03-12 Yuki Naito (@meso_cacase) ver.6 トップページを本CGIと統合
+# 2015-06-17 Yuki Naito (@meso_cacase) ver.6.1 結果を公開する機能を追加
 
 use warnings ;
 use strict ;
@@ -165,7 +166,8 @@ $table</table>
 
 <form method=POST id=save name=save action='${url}save.cgi'>
 <p>この結果をﾃﾞｭﾌﾌサーバに保存し、公開用のURLを発行します。<br>
-削除パスワードを設定しておけば、あとで消すこともできます。</p>
+削除パスワードを設定しておけば、あとで消すこともできます。<br>
+<b>公開期間は3日間です。</b>公開期間を過ぎると自動的に削除されます。</p>
 
 <table id=passwd>
 <tr>
@@ -175,6 +177,8 @@ $table</table>
 </table>
 
 <input type=submit onclick='return savehtml();' value='結果を公開する'>
+
+<p>この機能はテスト運用中のものです。予告なく提供を中止することがあります。</p>
 </form>
 </div>
 --EOS--
@@ -300,7 +304,7 @@ $message =~ s{^(ERROR.*)$}{<p><font color=red>$1</font></p>}s ;
 <p>新着情報：</p>
 
 <ul>
-	<li>2015-06-17　ﾃﾞｭﾌﾌの結果を公開する機能を追加
+	<li>2015-06-17　ﾃﾞｭﾌﾌの結果を公開する機能を追加 (ver.6.1)
 	<li>2014-03-14　トップページURLを <a href='http://difff.jp/'>http://difff.jp/</a> に変更
 	<li>2014-03-12　ITmediaニュース -
 		<a target='_blank' href='http://www.itmedia.co.jp/news/articles/1403/12/news121.html'>
@@ -326,7 +330,7 @@ $message =~ s{^(ERROR.*)$}{<p><font color=red>$1</font></p>}s ;
 
 <hr><!-- ________________________________________ -->
 
-<p><font color=gray>Last modified on Jun 17, 2015 by
+<p><font color=gray>Last modified on Jul 30, 2015 by
 <a target='_blank' href='http://twitter.com/meso_cacase'>@meso_cacase</a>
 </font></p>
 --EOS--
@@ -470,7 +474,7 @@ my $html = <<"--EOS--" ;
 <font size=5>
 	<a class=k href='$url'>
 	テキスト比較ツール difff《ﾃﾞｭﾌﾌ》</a></font><!--
---><font size=3>ver.6</font>
+--><font size=3>ver.6.1</font>
 &emsp;
 <font size=1 style='vertical-align:top'>
 	<a style='vertical-align:top' href='${url}en/'>English</a> |
