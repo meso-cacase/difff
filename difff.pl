@@ -431,13 +431,13 @@ my $html = <<"--EOS--" ;
 		element2.setAttribute('value', document.difff.sequenceB.value);
 		document.save.appendChild(element2);
 
-		return confirm('本当に公開してもいいですか？');
+		return confirm('本当に公開してもいいですか？\\n[OK] → 公開用のURLに移動します。');
 	}
 //-->
 </script>
 <style type='text/css'>
 <!--
-	* { font-family:verdana,arial,helvetica,sans-serif; }
+	* { font-family:verdana,arial,helvetica,sans-serif }
 	p,table,textarea,ul { font-size:10pt }
 	textarea { width:100% }
 	a  { color:#3366CC }

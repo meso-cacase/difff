@@ -354,7 +354,7 @@ my $html = <<"--EOS--" ;
 </script>
 <style type='text/css'>
 <!--
-	* { font-family:verdana,arial,helvetica,sans-serif; }
+	* { font-family:verdana,arial,helvetica,sans-serif }
 	p,table,textarea,ul { font-size:10pt }
 	textarea { width:100% }
 	a  { color:#3366CC }

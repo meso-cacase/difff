@@ -73,9 +73,9 @@ my $html = <<"--EOS--" ;
 <title>difff《ﾃﾞｭﾌﾌ》</title>
 <style type='text/css'>
 <!--
-	* { font-family:verdana,arial,helvetica,sans-serif; }
-	p {
-		font-size:10pt;
+	* { font-family:verdana,arial,helvetica,sans-serif }
+	p { font-size:10pt }
+	.message {
 		width:500px;
 		padding:10pt;
 		border:dotted 1px #8c93ba;
@@ -105,7 +105,9 @@ my $html = <<"--EOS--" ;
 <hr><!-- ________________________________________ -->
 </div>
 
-<p><b>メッセージ：</b><br>$message</p>
+<p class=message><b>メッセージ：</b><br>$message</p>
+
+<p><a href='$url'>difff《ﾃﾞｭﾌﾌ》トップへ</a></p>
 
 </body>
 </html>
