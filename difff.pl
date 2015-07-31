@@ -431,7 +431,7 @@ my $html = <<"--EOS--" ;
 		element2.setAttribute('value', document.difff.sequenceB.value);
 		document.save.appendChild(element2);
 
-		return confirm('本当に公開してもいいですか？\\n[OK] → 公開用のURLに移動します。');
+		return confirm('本当に公開してもいいですか？\\n[OK] → 結果を公開し、そのページに移動します。');
 	}
 //-->
 </script>
