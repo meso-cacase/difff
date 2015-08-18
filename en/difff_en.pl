@@ -162,24 +162,24 @@ $table</table>
 <div id=save>
 <hr><!-- ________________________________________ -->
 
-<h4>この結果を公開する</h4>
+<h4>Create public link:</h4>
 
 <form method=POST id=save name=save action='${url}save.cgi'>
-<p>この結果をﾃﾞｭﾌﾌサーバに保存し、公開用のURLを発行します。<br>
-削除パスワードを設定しておけば、あとで消すこともできます。<br>
-<b>公開期間は3日間です。</b>公開期間を過ぎると自動的に削除されます。</p>
+<p>You can make a public link and share this result.<br>
+Public link will expire in <b>three days</b>.</p>
 
 <table id=passwd>
 <tr>
-	<td class=n>削除バスワード：<input type=text name=passwd size=10 value=''></td>
-	<td class=n>設定したパスワードは後で確認することが<br>できませんので必ず控えてください。</td>
+	<td class=n>Set password: <input type=text name=passwd size=10 value=''></td>
+	<td class=n><b>Note:</b>
+		You will need this password to<br>delete your public link by yourself.</td>
 </tr>
 </table>
 
-<input type=submit onclick='return savehtml();' value='結果を公開する'>
+<input type=submit onclick='return savehtml();' value='Publish'>
 
-<p>「結果を公開する」を押さない限り、入力した文書などがサーバに保存されることはありません。<br>
-この機能はテスト運用中のものです。予告なく提供を中止することがあります。</p>
+<p>Your data will never be stored in the server unless you click the "Publish" button.<br>
+This feature is in trial phase and may be discontinued without notice.</p>
 </form>
 </div>
 --EOS--
@@ -305,6 +305,7 @@ $message =~ s{^(ERROR.*)$}{<p><font color=red>$1</font></p>}s ;
 <p>What's new:</p>
 
 <ul>
+	<li>2015-08-18 <b>difff</b> adds option to create public links for sharing your result. (ver.6.1)
 	<li>2014-03-14 URL has been changed: <a href='http://difff.jp/'>http://difff.jp/</a>
 	<li>2014-03-12 <b>difff</b> was introduced by 
 		<a target='_blank' href='http://www.itmedia.co.jp/news/articles/1403/12/news121.html'>
@@ -330,7 +331,7 @@ $message =~ s{^(ERROR.*)$}{<p><font color=red>$1</font></p>}s ;
 
 <hr><!-- ________________________________________ -->
 
-<p><font color=gray>Last modified on Apr 17, 2015 by
+<p><font color=gray>Last modified on Aug 18, 2015 by
 <a target='_blank' href='http://twitter.com/meso_cacase'>@meso_cacase</a>
 </font></p>
 --EOS--
@@ -429,7 +430,7 @@ my $html = <<"--EOS--" ;
 		element2.setAttribute('value', document.difff.sequenceB.value);
 		document.save.appendChild(element2);
 
-		return confirm('本当に公開してもいいですか？\\n[OK] → 結果を公開し、そのページに移動します。');
+		return confirm('Are you shure you want to publish this page?\\n[OK] : Publish and move to the created public link.');
 	}
 //-->
 </script>

@@ -123,16 +123,16 @@ my ($count1_B, $count2_B, $count3_B, $wcount_B) = count_char($sequenceB) ;
 $table .= <<"--EOS--" ;
 <tr>
 	<td><font color=gray>
-		文字数: $count1_A<br>
-		空白数: @{[$count2_A - $count1_A]} 空白込み文字数: $count2_A<br>
-		改行数: @{[$count3_A - $count2_A]} 改行込み文字数: $count3_A<br>
-		単語数: $wcount_A
+		$wcount_A words<br>
+		$count1_A chars<br>
+		@{[$count2_A - $count1_A]} spaces (sum: $count2_A chars)<br>
+		@{[$count3_A - $count2_A]} linefeeds (sum: $count3_A chars)
 	</font></td>
 	<td><font color=gray>
-		文字数: $count1_B<br>
-		空白数: @{[$count2_B - $count1_B]} 空白込み文字数: $count2_B<br>
-		改行数: @{[$count3_B - $count2_B]} 改行込み文字数: $count3_B<br>
-		単語数: $wcount_B
+		$wcount_B words<br>
+		$count1_B chars<br>
+		@{[$count2_B - $count1_B]} spaces (sum: $count2_B chars)<br>
+		@{[$count3_B - $count2_B]} linefeeds (sum: $count3_B chars)
 	</font></td>
 </tr>
 --EOS--
@@ -144,34 +144,35 @@ my $message = <<"--EOS--" ;
 $table</table>
 
 <p>
-	<input type=button id=hide value='結果のみ表示 (印刷用)' onclick='hideForm()'> |
+	<input type=button id=hide value='Hide form (print friendly)' onclick='hideForm()'> |
 	<input type=radio name=color value=1 onclick='setColor1()' checked>
-		<span class=blue >カラー1</span>
+		<span class=blue >Color 1</span>
 	<input type=radio name=color value=2 onclick='setColor2()'>
-		<span class=green>カラー2</span>
+		<span class=green>Color 2</span>
 	<input type=radio name=color value=3 onclick='setColor3()'>
-		<span class=black>モノクロ</span>
+		<span class=black>Black &amp; White</span>
 </p>
 </div>
 
 <div id=save>
 <hr><!-- ________________________________________ -->
 
-<h4>このページを削除する</h4>
+<h4>Delete this page</h4>
 
 <form method=POST id=save name=save action='${url}delete.cgi'>
-<p>このページを公開するときに設定した<b>削除パスワード</b>を入力してください。</p>
+<p>Enter your password to delete this page.</p>
 
 <table id=passwd>
 <tr>
-	<td class=n>削除バスワード：<input type=text name=passwd size=10 value=''></td>
-	<td class=n>設定したバスワードを忘れてしまった場合<br>は削除できません。</td>
+	<td class=n>Password: <input type=text name=passwd size=10 value=''></td>
+	<td class=n><b>Note:</b>
+		The page cannot be deleted<br>if you forgot your password.</td>
 </tr>
 </table>
 
-<input type=submit onclick='return deletehtml();' value='削除する'>
+<input type=submit onclick='return deletehtml();' value='Delete'>
 
-<p>この機能はテスト運用中のものです。予告なく提供を中止することがあります。</p>
+<p>This feature is in trial phase and may be discontinued without notice.</p>
 </form>
 </div>
 --EOS--
@@ -303,14 +304,14 @@ $sequenceB = escape_char($sequenceB) ;  # XSS対策
 
 my $html = <<"--EOS--" ;
 <!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN'>
-<html lang=ja>
+<html>
 
 <head>
 <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
 <meta http-equiv='Content-Script-Type' content='text/javascript'>
 <meta http-equiv='Content-Style-Type' content='text/css'>
 <meta name='author' content='Yuki Naito'>
-<title>difff《ﾃﾞｭﾌﾌ》</title>
+<title>difff - text compare</title>
 <script type='text/javascript'>
 <!--
 	function hideForm() {
@@ -318,12 +319,12 @@ my $html = <<"--EOS--" ;
 			document.getElementById('top' ).style.display = 'block';
 			document.getElementById('form').style.display = 'block';
 			document.getElementById('save').style.display = 'block';
-			document.getElementById('hide').value = '結果のみ表示 (印刷用)';
+			document.getElementById('hide').value = 'Hide form (print friendly)';
 		} else {
 			document.getElementById('top' ).style.display = 'none';
 			document.getElementById('form').style.display = 'none';
 			document.getElementById('save').style.display = 'none';
-			document.getElementById('hide').value = '全体を表示';
+			document.getElementById('hide').value = 'Show all';
 		}
 	}
 	function setColor1() {
@@ -348,7 +349,7 @@ my $html = <<"--EOS--" ;
 		}
 	}
 	function deletehtml() {
-		return confirm('本当に削除してもいいですか？\\nこの操作は取り消すことができません。');
+		return confirm('Are you shure you want to delete this page?\\nThis operation cannot be cancelled.');
 	}
 //-->
 </script>
@@ -390,22 +391,22 @@ my $html = <<"--EOS--" ;
 <div id=top style='border-top:5px solid #00BBFF; padding-top:10px'>
 <font size=5>
 	<a class=k href='$url'>
-	テキスト比較ツール difff《ﾃﾞｭﾌﾌ》</a></font><!--
+	<b>difff</b> - online text compare </a></font><!--
 --><font size=3>ver.6.1</font>
 &emsp;
 <font size=1 style='vertical-align:top'>
-	<a style='vertical-align:top' href='${url}en/'>English</a> |
-	Japanese
+	English |
+	<a style='vertical-align:top' href='${url}../'>Japanese</a>
 </font>
 &emsp;
 <font size=1 style='vertical-align:top'>
-<a style='vertical-align:top' href='${url}v5/'>旧バージョン (ver.5)</a>
+<a style='vertical-align:top' href='${url}../v5/index_en.html'>Previous release (ver.5)</a>
 </font>
 <hr><!-- ________________________________________ -->
 </div>
 
 <div id=form>
-<p>下の枠に比較したい文章を入れてくだちい。差分 (diff) を表示します。</p>
+<p>Input two texts below and click 'compare':</p>
 
 <form method=POST id=difff name=difff action='$url'>
 <table cellspacing=0>
@@ -415,7 +416,7 @@ my $html = <<"--EOS--" ;
 </tr>
 </table>
 
-<p><input type=submit value='比較する'></p>
+<p><input type=submit value='compare'></p>
 </form>
 </div>
 

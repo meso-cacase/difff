@@ -22,12 +22,12 @@ my $md5 = md5_hex($query{'passwd'}) ;
 
 # 削除を実行
 (-f "data/${md5}_${filename}") and unlink "data/${md5}_${filename}"
-	or print_html("ページを削除できませんでした。パスワードをご確認ください (1)") ;
+	or print_html("Cannot delete the page. Please confirm your password (1)") ;
 (-l "data/$filename") and unlink "data/$filename"
-	or print_html("ページを削除できませんでした。パスワードをご確認ください (2)") ;
+	or print_html("Cannot delete the page. Please confirm your password (2)") ;
 
 # 結果を表示
-print_html("ページを削除しました") ;
+print_html("The page was successfully deleted.") ;
 
 exit ;
 
@@ -64,13 +64,13 @@ my $message = $_[0] // '' ;
 #- ▼ HTML出力
 my $html = <<"--EOS--" ;
 <!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN'>
-<html lang=ja>
+<html>
 
 <head>
 <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
 <meta http-equiv='Content-Style-Type' content='text/css'>
 <meta name='author' content='Yuki Naito'>
-<title>difff《ﾃﾞｭﾌﾌ》</title>
+<title>difff - text compare</title>
 <style type='text/css'>
 <!--
 	* { font-family:verdana,arial,helvetica,sans-serif }
@@ -91,23 +91,23 @@ my $html = <<"--EOS--" ;
 <div id=top style='border-top:5px solid #00BBFF; padding-top:10px'>
 <font size=5>
 	<a class=k href='$url'>
-	テキスト比較ツール difff《ﾃﾞｭﾌﾌ》</a></font><!--
+	<b>difff</b> - online text compare </a></font><!--
 --><font size=3>ver.6.1</font>
 &emsp;
 <font size=1 style='vertical-align:top'>
-	<a style='vertical-align:top' href='${url}en/'>English</a> |
-	Japanese
+	English |
+	<a style='vertical-align:top' href='${url}../'>Japanese</a>
 </font>
 &emsp;
 <font size=1 style='vertical-align:top'>
-<a style='vertical-align:top' href='${url}v5/'>旧バージョン (ver.5)</a>
+<a style='vertical-align:top' href='${url}../v5/index_en.html'>Previous release (ver.5)</a>
 </font>
 <hr><!-- ________________________________________ -->
 </div>
 
-<p class=message><b>メッセージ：</b><br>$message</p>
+<p class=message><b>Information:</b><br>$message</p>
 
-<p><a href='$url'>difff《ﾃﾞｭﾌﾌ》トップへ</a></p>
+<p><a href='$url'>Back to main page</a></p>
 
 </body>
 </html>
