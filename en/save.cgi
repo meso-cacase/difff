@@ -5,20 +5,15 @@
 # 比較するテキストとして、HTTPリクエストから sequenceA および sequenceB を取得し、
 # diffコマンドを用いて文字ごと（英単語は単語ごと）に比較し差分をハイライト表示する
 #
-# 2012-10-22 Yuki Naito (@meso_cacase)
-# 2013-03-07 Yuki Naito (@meso_cacase) 日本語処理をPerl5.8/UTF-8に変更
-# 2013-03-12 Yuki Naito (@meso_cacase) ver.6 トップページを本CGIと統合
-# 2015-06-17 Yuki Naito (@meso_cacase) ver.6.1 結果を公開する機能を追加
+# 2015-06-11 Yuki Naito (@meso_cacase) difff.plをもとにsave.cgiを作成
 
 use warnings ;
 use strict ;
 use utf8 ;
 use POSIX ;
+use Digest::MD5 qw(md5_hex) ;
 
-# 保存したHTMLファイルから作業を再開できるよう、FORMの送り先に完全URLを指定
-my $url = 'http://difff.jp/en/' ;
-# 保存したHTMLファイルから作業を再開できなくてもよい場合は相対パスを指定
-# my $url = './' ;
+my $url = './' ;
 
 my $diffcmd = '/usr/bin/diff' ;  # diffコマンドのパスを指定
 my $fifodir = '/tmp' ;           # FIFOを作成するディレクトリを指定
@@ -128,16 +123,16 @@ my ($count1_B, $count2_B, $count3_B, $wcount_B) = count_char($sequenceB) ;
 $table .= <<"--EOS--" ;
 <tr>
 	<td><font color=gray>
-		$wcount_A words<br>
-		$count1_A chars<br>
-		@{[$count2_A - $count1_A]} spaces (sum: $count2_A chars)<br>
-		@{[$count3_A - $count2_A]} linefeeds (sum: $count3_A chars)
+		文字数: $count1_A<br>
+		空白数: @{[$count2_A - $count1_A]} 空白込み文字数: $count2_A<br>
+		改行数: @{[$count3_A - $count2_A]} 改行込み文字数: $count3_A<br>
+		単語数: $wcount_A
 	</font></td>
 	<td><font color=gray>
-		$wcount_B words<br>
-		$count1_B chars<br>
-		@{[$count2_B - $count1_B]} spaces (sum: $count2_B chars)<br>
-		@{[$count3_B - $count2_B]} linefeeds (sum: $count3_B chars)
+		文字数: $count1_B<br>
+		空白数: @{[$count2_B - $count1_B]} 空白込み文字数: $count2_B<br>
+		改行数: @{[$count3_B - $count2_B]} 改行込み文字数: $count3_B<br>
+		単語数: $wcount_B
 	</font></td>
 </tr>
 --EOS--
@@ -149,37 +144,34 @@ my $message = <<"--EOS--" ;
 $table</table>
 
 <p>
-	<input type=button id=hide value='Hide form (print friendly)' onclick='hideForm()'> |
+	<input type=button id=hide value='結果のみ表示 (印刷用)' onclick='hideForm()'> |
 	<input type=radio name=color value=1 onclick='setColor1()' checked>
-		<span class=blue >Color 1</span>
+		<span class=blue >カラー1</span>
 	<input type=radio name=color value=2 onclick='setColor2()'>
-		<span class=green>Color 2</span>
+		<span class=green>カラー2</span>
 	<input type=radio name=color value=3 onclick='setColor3()'>
-		<span class=black>Black &amp; White</span>
+		<span class=black>モノクロ</span>
 </p>
 </div>
 
 <div id=save>
 <hr><!-- ________________________________________ -->
 
-<h4>この結果を公開する</h4>
+<h4>このページを削除する</h4>
 
-<form method=POST id=save name=save action='${url}save.cgi'>
-<p>この結果をﾃﾞｭﾌﾌサーバに保存し、公開用のURLを発行します。<br>
-削除パスワードを設定しておけば、あとで消すこともできます。<br>
-<b>公開期間は3日間です。</b>公開期間を過ぎると自動的に削除されます。</p>
+<form method=POST id=save name=save action='${url}delete.cgi'>
+<p>このページを公開するときに設定した<b>削除パスワード</b>を入力してください。</p>
 
 <table id=passwd>
 <tr>
 	<td class=n>削除バスワード：<input type=text name=passwd size=10 value=''></td>
-	<td class=n>設定したパスワードは後で確認することが<br>できませんので必ず控えてください。</td>
+	<td class=n>設定したバスワードを忘れてしまった場合<br>は削除できません。</td>
 </tr>
 </table>
 
-<input type=submit onclick='return savehtml();' value='結果を公開する'>
+<input type=submit onclick='return deletehtml();' value='削除する'>
 
-<p>「結果を公開する」を押さない限り、入力した文書などがサーバに保存されることはありません。<br>
-この機能はテスト運用中のものです。予告なく提供を中止することがあります。</p>
+<p>この機能はテスト運用中のものです。予告なく提供を中止することがあります。</p>
 </form>
 </div>
 --EOS--
@@ -290,80 +282,19 @@ sub print_html {  # HTMLを出力
 #- ▼ メモ
 # ・比較結果ページを出力（デフォルト）
 # ・引数が ERROR で始まる場合はエラーページを出力
-# ・引数がない場合はトップページを出力
+# ・引数がない場合はトップページへリダイレクト
 #- ▲ メモ
 
 my $message = $_[0] // '' ;
+my $save    = 1 ;
 
 #- ▼ エラーページ：引数が ERROR で始まる場合
-$message =~ s{^(ERROR.*)$}{<p><font color=red>$1</font></p>}s ;
+$message =~ s{^(ERROR.*)$}{<p><font color=red>$1</font></p>}s and
+$save = 0 ;
 #- ▲ エラーページ：引数が ERROR で始まる場合
 
 #- ▼ トップページ：引数がない場合
-(not $message) and $message = <<'--EOS--'
-<div id=news>
-<p>What's new:</p>
-
-<ul>
-	<li>2014-03-14 URL has been changed: <a href='http://difff.jp/'>http://difff.jp/</a>
-	<li>2014-03-12 <b>difff</b> was introduced by 
-		<a target='_blank' href='http://www.itmedia.co.jp/news/articles/1403/12/news121.html'>
-			ITmedia news</a> (in Japanese).
-	<li>2013-12-12 <b>difff</b> was introduced by 
-		<a target='_blank' href='http://togotv.dbcls.jp/20130828.html'>
-			TogoTV</a> (in Japanese).
-	<li>2013-03-12 <b>difff</b> ver.6 released.
-		<a target='_blank' href='http://g86.dbcls.jp/~meso/meme/archives/2313'>
-			Release note</a> (in Japanese).
-	<li>2013-01-11 English page launched.
-	<li>2012-10-22 Source code available via
-		<a target='_blank' href='https://github.com/meso-cacase/difff'>
-			GitHub</a>.
-	<li>2012-04-16 <b>difff</b> was introduced by 
-		<a target='_blank' href='http://gigazine.net/news/20120416-difff/'>
-			GIGAZINE</a> (in Japanese).
-	<li>2012-04-13 <b>difff</b> ver.5 released.
-	<li>2008-02-18 <b>difff</b> ver.4 released. Japanese characters supported.
-	<li>2004-02-19 <b>difff</b> ver.1 released.
-</ul>
-</div>
-
-<hr><!-- ________________________________________ -->
-
-<p><font color=gray>Last modified on Apr 17, 2015 by
-<a target='_blank' href='http://twitter.com/meso_cacase'>@meso_cacase</a>
-</font></p>
---EOS--
-
-and $sequenceA = <<'--EOS--'
-   Betty Botter bought some butter, 
-But, she said, this butter's bitter;
-If I put it in my batter,
-It will make my batter bitter,
-But a bit of better butter
-Will make my batter better.
-So she bought a bit of butter
-Better than her bitter butter,
-And she put it in her batter,
-And it made her batter better,
-So 'twas better Betty Botter
-Bought a bit of better butter.
---EOS--
-
-and $sequenceB = <<'--EOS--' ;
-Betty Botter bought some butter,
-But, she said, the butter's bitter;
-If I put it in my batter,
-That will make my batter bitter.
-But a bit of better butter, 
-That will make my batter better.
-So she bought a bit of butter
-Better than her bitter butter.
-And she put it in her batter,
-And it made her batter better.
-So it was better Betty Botter
-Bought a bit of better butter.
---EOS--
+(not $message) and redirect_page($url) ;
 #- ▲ トップページ：引数がない場合
 
 #- ▼ HTML出力
@@ -372,14 +303,14 @@ $sequenceB = escape_char($sequenceB) ;  # XSS対策
 
 my $html = <<"--EOS--" ;
 <!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN'>
-<html>
+<html lang=ja>
 
 <head>
 <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
 <meta http-equiv='Content-Script-Type' content='text/javascript'>
 <meta http-equiv='Content-Style-Type' content='text/css'>
 <meta name='author' content='Yuki Naito'>
-<title>difff - text compare</title>
+<title>difff《ﾃﾞｭﾌﾌ》</title>
 <script type='text/javascript'>
 <!--
 	function hideForm() {
@@ -387,12 +318,12 @@ my $html = <<"--EOS--" ;
 			document.getElementById('top' ).style.display = 'block';
 			document.getElementById('form').style.display = 'block';
 			document.getElementById('save').style.display = 'block';
-			document.getElementById('hide').value = 'Hide form (print friendly)';
+			document.getElementById('hide').value = '結果のみ表示 (印刷用)';
 		} else {
 			document.getElementById('top' ).style.display = 'none';
 			document.getElementById('form').style.display = 'none';
 			document.getElementById('save').style.display = 'none';
-			document.getElementById('hide').value = 'Show all';
+			document.getElementById('hide').value = '全体を表示';
 		}
 	}
 	function setColor1() {
@@ -416,20 +347,8 @@ my $html = <<"--EOS--" ;
 			emList[i].className = 'black' ;
 		}
 	}
-	function savehtml() {
-		var element1 = document.createElement('input');
-		element1.setAttribute('type', 'hidden');
-		element1.setAttribute('name', 'sequenceA');
-		element1.setAttribute('value', document.difff.sequenceA.value);
-		document.save.appendChild(element1);
-
-		var element2 = document.createElement('input');
-		element2.setAttribute('type', 'hidden');
-		element2.setAttribute('name', 'sequenceB');
-		element2.setAttribute('value', document.difff.sequenceB.value);
-		document.save.appendChild(element2);
-
-		return confirm('本当に公開してもいいですか？\\n[OK] → 結果を公開し、そのページに移動します。');
+	function deletehtml() {
+		return confirm('本当に削除してもいいですか？\\nこの操作は取り消すことができません。');
 	}
 //-->
 </script>
@@ -471,22 +390,22 @@ my $html = <<"--EOS--" ;
 <div id=top style='border-top:5px solid #00BBFF; padding-top:10px'>
 <font size=5>
 	<a class=k href='$url'>
-	<b>difff</b> - online text compare </a></font><!--
+	テキスト比較ツール difff《ﾃﾞｭﾌﾌ》</a></font><!--
 --><font size=3>ver.6.1</font>
 &emsp;
 <font size=1 style='vertical-align:top'>
-	English |
-	<a style='vertical-align:top' href='${url}../'>Japanese</a>
+	<a style='vertical-align:top' href='${url}en/'>English</a> |
+	Japanese
 </font>
 &emsp;
 <font size=1 style='vertical-align:top'>
-<a style='vertical-align:top' href='${url}../v5/index_en.html'>Previous release (ver.5)</a>
+<a style='vertical-align:top' href='${url}v5/'>旧バージョン (ver.5)</a>
 </font>
 <hr><!-- ________________________________________ -->
 </div>
 
 <div id=form>
-<p>Input two texts below and click 'compare':</p>
+<p>下の枠に比較したい文章を入れてくだちい。差分 (diff) を表示します。</p>
 
 <form method=POST id=difff name=difff action='$url'>
 <table cellspacing=0>
@@ -496,7 +415,7 @@ my $html = <<"--EOS--" ;
 </tr>
 </table>
 
-<p><input type=submit value='compare'></p>
+<p><input type=submit value='比較する'></p>
 </form>
 </div>
 
@@ -506,9 +425,55 @@ $message
 </html>
 --EOS--
 
-print "Content-type: text/html; charset=utf-8\n\n$html" ;
+if ($save){
+	my $filename = save_html($html) ;  # HTMLを保存
+	redirect_page($filename) ;         # そのページにリダイレクトする
+} else {
+	print "Content-type: text/html; charset=utf-8\n\n$html" ;
+}
 #- ▲ HTML出力
 
+exit ;
+} ;
+# ====================
+sub save_html {  # HTMLを保存する
+my $html = $_[0] // '' ;
+
+# 削除パスワードのhashを取得。ファイル名の一部に埋め込む
+my $md5 = md5_hex($query{'passwd'}) ;
+
+# ランダムな5文字のファイル名を生成（例：nw4c6.html）
+# 32^5 = 33,554,432 通りのファイル名をつけられるのでほぼ重複しない
+my @char = ('a'..'k', 'm', 'n', 'p'..'z', '2'..'9') ;  # 0,o,1,lは使わない
+my $filename =
+	$char[rand(@char)] .
+	$char[rand(@char)] .
+	$char[rand(@char)] .
+	$char[rand(@char)] .
+	$char[rand(@char)] .
+	'.html' ;
+
+# 同名のファイルが既に存在する場合はエラーを返す
+(-e "data/$filename") and print_html('ERROR : cannot save file (1)') ;
+
+# HTMLをファイルとして保存。削除パスワードのhashをファイル名の一部に埋め込む
+# （例：81dc9bdb52d04dc20036dbd8313ed055_nw4c6.html）
+open  FILE, ">data/${md5}_${filename}"
+	or print_html('ERROR : cannot save file (2)') ;
+print FILE $html ;
+close FILE ;
+
+# ブラウザからはアクセスするのはこちらのファイル
+# （nw4c6.html -> 81dc9bdb52d04dc20036dbd8313ed055_nw4c6.html）
+symlink "${md5}_${filename}", "data/$filename"
+	or print_html('ERROR : cannot save file (3)') ;
+
+return $filename ;
+} ;
+# ====================
+sub redirect_page {  # リダイレクトする
+my $uri = $_[0] // '' ;
+print "Location: $uri\n\n" ;
 exit ;
 } ;
 # ====================
