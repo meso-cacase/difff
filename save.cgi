@@ -399,7 +399,7 @@ my $html = <<"--EOS--" ;
 </font>
 &emsp;
 <font size=1 style='vertical-align:top'>
-<a style='vertical-align:top' href='${url}v5/'>旧バージョン</a>
+<a style='vertical-align:top' href='${url}v5/'>旧バージョン (ver.5)</a>
 </font>
 <hr><!-- ________________________________________ -->
 </div>

@@ -178,7 +178,8 @@ $table</table>
 
 <input type=submit onclick='return savehtml();' value='結果を公開する'>
 
-<p>この機能はテスト運用中のものです。予告なく提供を中止することがあります。</p>
+<p>「結果を公開する」を押さない限り、入力した文書などがサーバに保存されることはありません。<br>
+この機能はテスト運用中のものです。予告なく提供を中止することがあります。</p>
 </form>
 </div>
 --EOS--
@@ -482,7 +483,7 @@ my $html = <<"--EOS--" ;
 </font>
 &emsp;
 <font size=1 style='vertical-align:top'>
-<a style='vertical-align:top' href='${url}v5/'>旧バージョン</a>
+<a style='vertical-align:top' href='${url}v5/'>旧バージョン (ver.5)</a>
 </font>
 <hr><!-- ________________________________________ -->
 </div>
