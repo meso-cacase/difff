@@ -94,13 +94,13 @@ my $html = <<"--EOS--" ;
 	<b>difff</b> - online text compare </a></font><!--
 --><font size=3>ver.6.1</font>
 &emsp;
-<font size=1 style='vertical-align:top'>
+<font size=1 style='vertical-align:16px'>
 	English |
-	<a style='vertical-align:top' href='${url}../'>Japanese</a>
+	<a href='${url}../'>Japanese</a>
 </font>
 &emsp;
-<font size=1 style='vertical-align:top'>
-<a style='vertical-align:top' href='${url}../v5/index_en.html'>Previous release (ver.5)</a>
+<font size=1 style='vertical-align:16px'>
+<a href='${url}../v5/index_en.html'>Previous release (ver.5)</a>
 </font>
 <hr><!-- ________________________________________ -->
 </div>

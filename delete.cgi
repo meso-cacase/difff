@@ -94,13 +94,13 @@ my $html = <<"--EOS--" ;
 	テキスト比較ツール difff《ﾃﾞｭﾌﾌ》</a></font><!--
 --><font size=3>ver.6.1</font>
 &emsp;
-<font size=1 style='vertical-align:top'>
-	<a style='vertical-align:top' href='${url}en/'>English</a> |
+<font size=1 style='vertical-align:16px'>
+	<a href='${url}en/'>English</a> |
 	Japanese
 </font>
 &emsp;
-<font size=1 style='vertical-align:top'>
-<a style='vertical-align:top' href='${url}v5/'>旧バージョン (ver.5)</a>
+<font size=1 style='vertical-align:16px'>
+<a href='${url}v5/'>旧バージョン (ver.5)</a>
 </font>
 <hr><!-- ________________________________________ -->
 </div>
