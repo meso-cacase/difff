@@ -201,7 +201,7 @@ if (defined $ENV{'REQUEST_METHOD'} and
 } elsif (defined $ENV{'QUERY_STRING'}){
 	$buffer = $ENV{'QUERY_STRING'} ;
 }
-length $buffer > 1000000 and print_html('ERROR : input too large') ;
+length $buffer > 5000000 and print_html('ERROR : input too large') ;
 my %query ;
 my @query = split /&/, $buffer ;
 foreach (@query){
