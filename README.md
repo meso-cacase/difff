@@ -145,7 +145,7 @@ http://difff.jp/ では、保存期間を過ぎると結果が削除されます
 ライセンス
 --------
 
-Copyright &copy; 2004-2015 Yuki Naito
+Copyright &copy; 2004-2017 Yuki Naito
  ([@meso_cacase](http://twitter.com/meso_cacase))  
 This software is distributed under [modified BSD license]
  (http://www.opensource.org/licenses/bsd-license.php).
