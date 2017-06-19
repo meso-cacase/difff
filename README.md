@@ -27,8 +27,7 @@ FIFO（名前付きパイプ）を作成してdiffコマンドに文書を渡し
 サンプル画像
 -----
 
-![スクリーンショット]
-(http://g86.dbcls.jp/~meso/meme/wp-content/uploads/2013/03/difff6.png
+![スクリーンショット](http://data.dbcls.jp/~meso/img/difff6.png
 "difff《ﾃﾞｭﾌﾌ》スクリーンショット")
 
 
@@ -147,5 +146,5 @@ http://difff.jp/ では、保存期間を過ぎると結果が削除されます
 
 Copyright &copy; 2004-2017 Yuki Naito
  ([@meso_cacase](http://twitter.com/meso_cacase))  
-This software is distributed under [modified BSD license]
- (http://www.opensource.org/licenses/bsd-license.php).
+This software is distributed under
+[modified BSD license](http://www.opensource.org/licenses/bsd-license.php).
