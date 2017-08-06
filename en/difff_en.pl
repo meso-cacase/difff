@@ -16,7 +16,7 @@ use utf8 ;
 use POSIX ;
 
 # 保存したHTMLファイルから作業を再開できるよう、FORMの送り先に完全URLを指定
-my $url = 'http://difff.jp/en/' ;
+my $url = 'https://difff.jp/en/' ;
 # 保存したHTMLファイルから作業を再開できなくてもよい場合は相対パスを指定
 # my $url = './' ;
 
@@ -305,6 +305,8 @@ $message =~ s{^(ERROR.*)$}{<p><font color=red>$1</font></p>}s ;
 <p>What's new:</p>
 
 <ul>
+	<li>2017-08-07 HTTPS encrypted connections supported -
+		<a href='https://difff.jp/en/'>https://difff.jp/en/</a>
 	<li>2015-08-18 <b>difff</b> adds option to create public links for sharing your result. (ver.6.1)
 	<li>2014-03-14 URL has been changed: <a href='http://difff.jp/'>http://difff.jp/</a>
 	<li>2014-03-12 <b>difff</b> was introduced by 
@@ -331,7 +333,7 @@ $message =~ s{^(ERROR.*)$}{<p><font color=red>$1</font></p>}s ;
 
 <hr><!-- ________________________________________ -->
 
-<p><font color=gray>Last modified on Apr 24, 2017 by
+<p><font color=gray>Last modified on Aug 7, 2017 by
 <a target='_blank' href='http://twitter.com/meso_cacase'>@meso_cacase</a>
 </font></p>
 --EOS--
