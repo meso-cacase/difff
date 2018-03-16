@@ -1,17 +1,17 @@
 difff《ﾃﾞｭﾌﾌ》
 ======================
 
-Webベースのテキスト比較ツールです。2つのテキストの差分をハイライト表示します。
+Webベースのテキスト比較ツールです。2つのテキストの差分をハイライト表示します。  
+difff《ﾃﾞｭﾌﾌ》稼働中： https://difff.jp/
 
-+ https://difff.jp/  
-  テキスト比較ツール difff《ﾃﾞｭﾌﾌ》  
-  本レポジトリにあるCGIが実際に稼働しています。
+**difff** is a simple, web-based online tool for comparing two text files.
+Freely available to all users.  
+English version of difff: https://difff.jp/en/
 
-+ http://gigazine.net/news/20120416-difff/  
-  GIGAZINEで difff《ﾃﾞｭﾌﾌ》が紹介されました：  
-  “名前はちょっとネタっぽいですが、実用性は高く、日本語のテキストでもOK”
+![スクリーンショット](http://data.dbcls.jp/~meso/img/difff6.png
+"difff《ﾃﾞｭﾌﾌ》スクリーンショット")
 
-著者が管理している
+作者が管理している
 [difff《ﾃﾞｭﾌﾌ》のウェブサイト](https://difff.jp/)
 はどなたでも無償で利用でき、入力テキストも一切サーバに残りませんが、
 部外秘の文書をどうしても社内のサーバで ﾃﾞｭﾌﾌ したいというような要望が
@@ -22,13 +22,6 @@ diffコマンドは2つのファイルの差分を行単位で検出するプロ
 しかし、比較する文書をいったんファイルに書き出すのは秘匿性の点から
 好ましくないので、difff《ﾃﾞｭﾌﾌ》ではファイルを書き出すのではなく
 FIFO（名前付きパイプ）を作成してdiffコマンドに文書を渡しています。
-
-
-サンプル画像
------
-
-![スクリーンショット](http://data.dbcls.jp/~meso/img/difff6.png
-"difff《ﾃﾞｭﾌﾌ》スクリーンショット")
 
 
 動作環境
@@ -145,10 +138,10 @@ https://difff.jp/ では、保存期間を過ぎると結果が削除されま�
 + difff《ﾃﾞｭﾌﾌ》ver.5のソースをGitHubで公開。
 
 
-ライセンス
+License
 --------
 
-Copyright &copy; 2004-2017 Yuki Naito
+Copyright &copy; 2004-2018 Yuki Naito
  ([@meso_cacase](http://twitter.com/meso_cacase))  
 This software is distributed under
 [modified BSD license](http://www.opensource.org/licenses/bsd-license.php).
