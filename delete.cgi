@@ -88,7 +88,7 @@ my $html = <<"--EOS--" ;
 
 <body>
 
-<div id=top style='border-top:5px solid #FF8090; padding-top:10px'>
+<div id=top style='border-top:5px solid #00BBFF; padding-top:10px'>
 <font size=5>
 	<a class=k href='$url'>
 	テキスト比較ツール difff《ﾃﾞｭﾌﾌ》</a></font><!--
