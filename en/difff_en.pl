@@ -314,7 +314,7 @@ $message =~ s{^(ERROR.*)$}{<p><font color=red>$1</font></p>}s ;
 		<a target='_blank' href='http://togotv.dbcls.jp/20130828.html'>
 			TogoTV</a> (in Japanese).
 	<li>2013-03-12 <b>difff</b> ver.6 released.
-		<a target='_blank' href='http://g86.dbcls.jp/~meso/meme/archives/2313'>
+		<a target='_blank' href='http://data.dbcls.jp/~meso/meme/archives/2313'>
 			Release note</a> (in Japanese).
 	<li>2013-01-11 English page launched.
 	<li>2012-10-22 Source code available via

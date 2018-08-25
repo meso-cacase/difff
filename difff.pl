@@ -306,7 +306,7 @@ $message =~ s{^(ERROR.*)$}{<p><font color=red>$1</font></p>}s ;
 	<li>2017-08-07　HTTPSによる暗号化通信に対応 -
 		<a href='https://difff.jp/'>https://difff.jp/</a>
 	<li>2015-06-17　ﾃﾞｭﾌﾌの結果を公開する機能を追加 (ver.6.1) -
-		<a target='_blank' href='http://g86.dbcls.jp/~meso/meme/archives/2957'>
+		<a target='_blank' href='http://data.dbcls.jp/~meso/meme/archives/2957'>
 			説明</a>
 	<li>2014-03-14　トップページURLを <a href='http://difff.jp/'>http://difff.jp/</a> に変更
 	<li>2014-03-12　ITmediaニュース -
@@ -316,7 +316,7 @@ $message =~ s{^(ERROR.*)$}{<p><font color=red>$1</font></p>}s ;
 		<a target='_blank' href='http://togotv.dbcls.jp/20130828.html'>
 			difff《ﾃﾞｭﾌﾌ》を使って文章の変更箇所を調べる</a>
 	<li>2013-03-12　全面リニューアル (ver.6) -
-		<a target='_blank' href='http://g86.dbcls.jp/~meso/meme/archives/2313'>
+		<a target='_blank' href='http://data.dbcls.jp/~meso/meme/archives/2313'>
 			変更点</a>
 	<li>2013-01-11　<a href='https://difff.jp/en/'>英語版</a> を公開
 	<li>2012-10-22　ソースを公開 -
