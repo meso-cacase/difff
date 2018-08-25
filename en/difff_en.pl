@@ -111,8 +111,6 @@ foreach (0..$par-1){
 	defined $b_final[$_] or $b_final[$_] = '' ;
 	$a_final[$_] =~ s{(\ +</em>)}{escape_space($1)}ge ;
 	$b_final[$_] =~ s{(\ +</em>)}{escape_space($1)}ge ;
-	$a_final[$_] =~ s{<em>\s*</em>}{}g ;
-	$b_final[$_] =~ s{<em>\s*</em>}{}g ;
 	$table .=
 "<tr>
 	<td>$a_final[$_]</td>
