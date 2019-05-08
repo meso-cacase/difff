@@ -1,11 +1,12 @@
 difff《ﾃﾞｭﾌﾌ》
 ======================
 
-**difff** is a simple, web-based online tool for comparing two text files.
-Freely available to all users.  
+**difff** is a simple, web-based online tool for comparing two text files.  
+The software is open source, and freely available to all users.  
 English version of difff: https://difff.jp/en/
 
-Webベースのテキスト比較ツールです。2つのテキストの差分をハイライト表示します。  
+ウェブベースのテキスト比較ツールです。2つのテキストの差分をハイライト表示します。  
+本ソフトウェアはオープンソースであり、誰でも無償で自由に利用することができます。  
 difff《ﾃﾞｭﾌﾌ》稼働中： https://difff.jp/
 
 ![スクリーンショット](http://data.dbcls.jp/~meso/img/difff6.png
@@ -141,7 +142,7 @@ https://difff.jp/ では、保存期間を過ぎると結果が削除されま�
 License
 --------
 
-Copyright &copy; 2004-2018 Yuki Naito
+Copyright &copy; 2004-2019 Yuki Naito
  ([@meso_cacase](http://twitter.com/meso_cacase))  
 This software is distributed under
 [modified BSD license](http://www.opensource.org/licenses/bsd-license.php).
