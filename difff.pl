@@ -333,7 +333,7 @@ $message =~ s{^(ERROR.*)$}{<p><font color=red>$1</font></p>}s ;
 
 <hr><!-- ________________________________________ -->
 
-<p><font color=gray>Last modified on Mar 13, 2020 by
+<p><font color=gray>Last modified on Mar 14, 2020 by
 <a target='_blank' href='http://twitter.com/meso_cacase'>@meso_cacase</a>
 </font></p>
 --EOS--
@@ -491,8 +491,7 @@ my $html = <<"--EOS--" ;
 </div>
 
 <div id=form>
-<p>下の枠に比較したい文章を入れてくだちい。差分 (diff) を表示します。<br>
-<font color=red>【サービス停止予定】2020年3月13日(金)17:00～3月14日(土)17:00</font></p>
+<p>下の枠に比較したい文章を入れてくだちい。差分 (diff) を表示します。</p>
 
 <form method=POST id=difff name=difff action='$url'>
 <table cellspacing=0>

@@ -331,7 +331,7 @@ $message =~ s{^(ERROR.*)$}{<p><font color=red>$1</font></p>}s ;
 
 <hr><!-- ________________________________________ -->
 
-<p><font color=gray>Last modified on Mar 13, 2020 by
+<p><font color=gray>Last modified on Mar 14, 2020 by
 <a target='_blank' href='http://twitter.com/meso_cacase'>@meso_cacase</a>
 </font></p>
 --EOS--
@@ -487,8 +487,7 @@ my $html = <<"--EOS--" ;
 </div>
 
 <div id=form>
-<p><font color=red>Server maintenance: 13 Mar 2020, 17:00 to 14 Mar 2020, 17:00 +0900 (JST).</font><br>
-Input two texts below and click 'compare':</p>
+<p>Input two texts below and click 'compare':</p>
 
 <form method=POST id=difff name=difff action='$url'>
 <table cellspacing=0>
