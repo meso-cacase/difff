@@ -331,7 +331,7 @@ $message =~ s{^(ERROR.*)$}{<p><font color=red>$1</font></p>}s ;
 
 <hr><!-- ________________________________________ -->
 
-<p><font color=gray>Last modified on Mar 14, 2020 by
+<p><font color=gray>Last modified on Apr 1, 2020 by
 <a target='_blank' href='http://twitter.com/meso_cacase'>@meso_cacase</a>
 </font></p>
 --EOS--
@@ -397,7 +397,7 @@ my $html = <<"--EOS--" ;
 		}
 	}
 	function setColor1() {
-		document.getElementById('top').style.borderTop = '5px solid #00BBFF';
+		document.getElementById('top').style.borderTop = '5px solid #FF8090';
 		var emList = document.getElementsByTagName('em');
 		for (i = 0; i < emList.length; i++) {
 			emList[i].className = 'blue' ;
@@ -443,7 +443,7 @@ my $html = <<"--EOS--" ;
 	.k { color:black; text-decoration:none }
 	em { font-style:normal }
 	em,
-	.blue  { font-weight:bold; color:black; background:#99EEFF; border:1px solid #00BBFF }
+	.blue  { font-weight:bold; color:black; background:#FFDDEE; border:1px solid #FF8090 }
 	.green { font-weight:bold; color:black; background:#99FF99; border:none }
 	.black { font-weight:bold; color:white; background:black;   border:none }
 	table {
@@ -469,7 +469,7 @@ my $html = <<"--EOS--" ;
 
 <body>
 
-<div id=top style='border-top:5px solid #00BBFF; padding-top:10px'>
+<div id=top style='border-top:5px solid #FF8090; padding-top:10px'>
 <font size=5>
 	<a class=k href='$url'>
 	<b>difff</b> - online text compare </a></font><!--
@@ -487,7 +487,8 @@ my $html = <<"--EOS--" ;
 </div>
 
 <div id=form>
-<p>Input two texts below and click 'compare':</p>
+<p>Enjoy the <span class=blue>seasonal color</span> for a week. (2020/4/1)<br>
+Input two texts below and click 'compare':</p>
 
 <form method=POST id=difff name=difff action='$url'>
 <table cellspacing=0>
