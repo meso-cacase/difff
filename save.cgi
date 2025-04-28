@@ -325,7 +325,7 @@ my $html = <<"--EOS--" ;
 		}
 	}
 	function setColor1() {
-		document.getElementById('top').style.borderTop = '5px solid #FF8090';
+		document.getElementById('top').style.borderTop = '5px solid #00BBFF';
 		var emList = document.getElementsByTagName('em');
 		for (i = 0; i < emList.length; i++) {
 			emList[i].className = 'blue' ;
@@ -359,7 +359,7 @@ my $html = <<"--EOS--" ;
 	.k { color:black; text-decoration:none }
 	em { font-style:normal }
 	em,
-	.blue  { font-weight:bold; color:black; background:#FFDDEE; border:1px solid #FF8090 }
+	.blue  { font-weight:bold; color:black; background:#99EEFF; border:1px solid #00BBFF }
 	.green { font-weight:bold; color:black; background:#99FF99; border:none }
 	.black { font-weight:bold; color:white; background:black;   border:none }
 	table {
@@ -385,7 +385,7 @@ my $html = <<"--EOS--" ;
 
 <body>
 
-<div id=top style='border-top:5px solid #FF8090; padding-top:10px'>
+<div id=top style='border-top:5px solid #00BBFF; padding-top:10px'>
 <font size=5>
 	<a class=k href='$url'>
 	テキスト比較ツール difff《ﾃﾞｭﾌﾌ》</a></font><!--
@@ -403,8 +403,7 @@ my $html = <<"--EOS--" ;
 </div>
 
 <div id=form>
-<p>下の枠に比較したい文章を入れてくだちい。差分 (diff) を表示します。<br>
-季節限定で<span class=blue>桜色</span>の ﾃﾞｭﾌﾌ をお楽しみください。(2025/4/2)</p>
+<p>下の枠に比較したい文章を入れてくだちい。差分 (diff) を表示します。</p>
 
 <form method=POST id=difff name=difff action='$url'>
 <table cellspacing=0>
