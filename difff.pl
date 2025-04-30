@@ -355,7 +355,7 @@ Bought a bit of better butter.
 --EOS--
 
 and $sequenceB = <<'--EOS--' ;
-下記の文章を，ﾋﾋ較してくだちい．
+下記の文章を，ﾋﾋ較してください．
 Betty Botter bought some butter,
 But, she said, the butter's bitter;
 If I put it in my batter,
@@ -491,7 +491,7 @@ my $html = <<"--EOS--" ;
 </div>
 
 <div id=form>
-<p>下の枠に比較したい文章を入れてくだちい。差分 (diff) を表示します。</p>
+<p>下の枠に比較したい文章を入れてください。差分 (diff) を表示します。</p>
 
 <form method=POST id=difff name=difff action='$url'>
 <table cellspacing=0>
