@@ -491,7 +491,8 @@ my $html = <<"--EOS--" ;
 </div>
 
 <div id=form>
-<p>下の枠に比較したい文章を入れてくだちい。差分 (diff) を表示します。</p>
+<p>下の枠に比較したい文章を入れてくだちい。差分 (diff) を表示します。<br>
+<font color=red>【予告】サービス停止 2025年11月5日(水) 17:00 ～ 7日(金) 22:00</font></p>
 
 <form method=POST id=difff name=difff action='$url'>
 <table cellspacing=0>
