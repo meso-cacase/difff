@@ -403,7 +403,7 @@ my $html = <<"--EOS--" ;
 </div>
 
 <div id=form>
-<p>下の枠に比較したい文章を入れてくだちい。差分 (diff) を表示します。</p>
+<p>下の枠に比較したい文章を入れてください。差分 (diff) を表示します。</p>
 
 <form method=POST id=difff name=difff action='$url'>
 <table cellspacing=0>
