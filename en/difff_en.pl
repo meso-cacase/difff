@@ -41,11 +41,12 @@ $sequenceA eq '' and $sequenceB eq '' and print_html() ;
 my $fifopath_a = "$fifodir/difff.$$.A" ;  # $$はプロセスID
 my @a_split = split_text( escape_char($sequenceA) ) ;
 my $a_split = join("\n", @a_split) . "\n" ;
-fifo_send($a_split, $fifopath_a) ;
 
 my $fifopath_b = "$fifodir/difff.$$.B" ;  # $$はプロセスID
 my @b_split = split_text( escape_char($sequenceB) ) ;
 my $b_split = join("\n", @b_split) . "\n" ;
+
+fifo_send($a_split, $fifopath_a) ;
 fifo_send($b_split, $fifopath_b) ;
 # ▲ HTTPリクエストからクエリを取得し整形してFIFOに送る
 
