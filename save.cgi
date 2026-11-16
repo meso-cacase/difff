@@ -211,7 +211,7 @@ sub split_text {  # 比較する単位ごとに文字列を分割してリスト
 my $text = join('', @_) // '' ;
 $text =~ s/\n/<\$>/g ;  # もともとの改行を <$> に変換して処理
 my @text ;
-while ($text =~ s/^([a-z]+|<\$>|&\#?\w+;|.)//){
+while ($text =~ /\G([a-z]+|<\$>|&\#?\w+;|.)/g){
 	push @text, $1 ;
 }
 return @text ;
